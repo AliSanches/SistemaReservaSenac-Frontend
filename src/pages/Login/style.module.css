@@ -1,0 +1,16 @@
+@media (min-width: 320px) {
+  .containerDimensao {
+    width: 280px;
+  }
+
+  .logo {
+    width: 220px;
+  }
+
+  .fundo {
+    background: url("/Fundo.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}
