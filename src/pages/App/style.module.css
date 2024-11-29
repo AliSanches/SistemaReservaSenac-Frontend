@@ -1,0 +1,8 @@
+.nav {
+  color: white !important;
+  transition: 0.5s ease-in-out;
+}
+
+.nav:hover {
+  color: #f78b1f !important;
+}
