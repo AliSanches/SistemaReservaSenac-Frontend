@@ -1,8 +1,13 @@
 .nav {
   color: white !important;
   transition: 0.5s ease-in-out;
+  text-decoration: none;
 }
 
-.nav:hover {
-  color: #f78b1f !important;
+.active {
+  color: white !important;
+  padding: 5px 8px;
+  background-color: #f78b1f !important;
+  border-radius: 3px;
+  box-shadow: 2px 2px 5px 1px #313131;
 }

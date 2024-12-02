@@ -5,11 +5,9 @@ import Nav from "react-bootstrap/Nav";
 import style from "./style.module.css";
 import { MenuMobile } from "./MenuMobile";
 
-import { useNavigate, Outlet } from "react-router";
+import { NavLink, Outlet } from "react-router";
 
 export const Index = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="container-fluid p-0">
       <div className="container-lg d-flex justify-content-center my-2">
@@ -19,61 +17,78 @@ export const Index = () => {
         className="container-fluid d-flex justify-content-center bg-primary my-3"
         style={{ height: "80px" }}
       >
-        <div className="d-none d-md-flex justify-content-center align-items-center gap-5">
+        <nav className="d-none d-md-flex justify-content-center align-items-center gap-5">
           <Nav.Item>
-            <Nav.Link
-              className={style.nav}
-              onClick={() => navigate("/app/home")}
+            <NavLink
+              to="/app/home"
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
             >
               HOME
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link
-              className={style.nav}
-              onClick={() => navigate("/app/curso")}
+            <NavLink
+              to={"/app/curso"}
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
             >
               CURSO
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link
-              className={style.nav}
-              onClick={() => navigate("/app/turma")}
+            <NavLink
+              to={"/app/turma"}
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
             >
               TURMA
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link
-              className={style.nav}
-              onClick={() => navigate("/app/sala")}
+            <NavLink
+              to={"/app/sala"}
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
             >
               SALA
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link
-              className={style.nav}
-              onClick={() => navigate("/app/reserva")}
+            <NavLink
+              to={"/app/reserva"}
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
             >
               RESERVA
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link
-              className={style.nav}
-              onClick={() => navigate("/app/usuarios")}
+            <NavLink
+              to={"/app/usuarios"}
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
             >
               USUÁRIOS
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <Nav.Link className={style.nav} onClick={() => navigate("/")}>
+            <NavLink
+              to={"/"}
+              className={({ isActive }) =>
+                isActive ? `${style.nav} ${style.active}` : style.nav
+              }
+            >
               SAIR
-            </Nav.Link>
+            </NavLink>
           </Nav.Item>
-        </div>
+        </nav>
         <MenuMobile />
       </header>
       <Outlet />
