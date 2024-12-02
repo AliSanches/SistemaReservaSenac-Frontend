@@ -6,10 +6,11 @@ import style from "./style.module.css";
 import { MenuMobile } from "./MenuMobile";
 
 import { NavLink, Outlet } from "react-router";
+import { Footer } from "../Footer/Footer";
 
 export const Index = () => {
   return (
-    <div className="container-fluid p-0">
+    <div className="container-fluid p-0" style={{ height: "100vh" }}>
       <div className="container-lg d-flex justify-content-center my-2">
         <img style={{ width: "220px" }} src={logo} alt={logo} />
       </div>
@@ -91,7 +92,10 @@ export const Index = () => {
         </nav>
         <MenuMobile />
       </header>
-      <Outlet />
+      <main className="container-fluid" style={{ height: "63vh" }}>
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   );
 };

@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Home = () => {
-  return <div>Home</div>;
+  return <section className="container-lg">Home</section>;
 };
