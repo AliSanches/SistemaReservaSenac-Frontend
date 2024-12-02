@@ -4,6 +4,12 @@
   text-decoration: none;
 }
 
+.navMobile {
+  color: black !important;
+  transition: 0.5s ease-in-out;
+  text-decoration: none;
+}
+
 .active {
   color: white !important;
   padding: 5px 8px;
