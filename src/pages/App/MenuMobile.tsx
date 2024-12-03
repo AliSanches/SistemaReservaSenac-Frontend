@@ -24,12 +24,19 @@ export const MenuMobile = () => {
       <Button variant="primary" onClick={handleShow} className="fs-2">
         <FiMenu />
       </Button>
-      <Offcanvas show={show} onHide={handleClose} placement="top">
+      <Offcanvas
+        show={show}
+        onHide={handleClose}
+        placement="top"
+        className={style.modal}
+      >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Senac Piracicaba, SP</Offcanvas.Title>
+          <Offcanvas.Title>
+            <span className={style.txtLaranja}>Senac</span> Piracicaba, SP
+          </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <nav className="d-flex flex-column align-items-left gap-2">
+          <nav className="d-flex flex-column align-items-left gap-4">
             <Nav.Item>
               <NavLink
                 to="/app/home"
