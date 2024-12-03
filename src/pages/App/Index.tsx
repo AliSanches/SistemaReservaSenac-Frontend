@@ -11,7 +11,7 @@ import { Footer } from "../Footer/Footer";
 export const Index = () => {
   return (
     <div className="container-fluid p-0" style={{ height: "100vh" }}>
-      <div className="container-lg d-flex justify-content-center my-2">
+      <div className="container-lg d-flex justify-content-center pt-3">
         <img style={{ width: "220px" }} src={logo} alt={logo} />
       </div>
       <header
