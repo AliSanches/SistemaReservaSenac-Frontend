@@ -40,8 +40,12 @@ export const ModalCadastrarCurso = () => {
             >
               <Form.Control type="text" placeholder="curso" />
             </FloatingLabel>
+
+            <Form.Label>Tipo do curso</Form.Label>
             <Form.Select aria-label="Selecione o tipo do curso">
-              <option value="1">Administração</option>
+              <option value="1">Graduação</option>
+              <option value="1">Técnico</option>
+              <option value="1">Pós graduação</option>
             </Form.Select>
           </form>
         </Modal.Body>
