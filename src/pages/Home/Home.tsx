@@ -27,28 +27,33 @@ export const Home = () => {
           <Card.Img variant="top" src="/sala01.jpg" />
           <Card.Body>
             <Card.Title className="d-flex gap-2 fw-normal">
-              Sala: <p className="text-primary m-0">402</p>
+              Sala: <p className="text-primary m-0 fw-semibold">402</p>
             </Card.Title>
-            <Card.Text>
+            <div>
               <span className="text-black d-flex gap-2">
-                Turma: <p className="m-0 text-primary">10</p>
+                Turma: <p className="m-0 text-primary fw-semibold">10</p>
               </span>
               <span className="text-black d-flex gap-2">
-                Curso: <p className="m-0 text-primary">Administração</p>
+                Curso:{" "}
+                <p className="m-0 text-primary fw-semibold">Administração</p>
               </span>
               <span className="text-black d-flex gap-2">
-                Dia Inicio: <p className="m-0 text-primary">10/01/2025</p>
+                Dia Inicio:{" "}
+                <p className="m-0 text-primary fw-semibold">10/01/2025</p>
               </span>
               <span className="text-black d-flex gap-2">
-                Dia Término: <p className="m-0 text-primary">12/01/2025</p>
+                Dia Término:{" "}
+                <p className="m-0 text-primary fw-semibold">12/01/2025</p>
               </span>
               <span className="text-black d-flex gap-2">
-                Hora Entrada: <p className="m-0 text-primary">13:00H</p>
+                Hora Entrada:{" "}
+                <p className="m-0 text-primary fw-semibold">13:00H</p>
               </span>
               <span className="text-black d-flex gap-2">
-                Hora Saída: <p className="m-0 text-primary">17:30H</p>
+                Hora Saída:{" "}
+                <p className="m-0 text-primary fw-semibold">17:30H</p>
               </span>
-            </Card.Text>
+            </div>
           </Card.Body>
         </Card>
       </div>
