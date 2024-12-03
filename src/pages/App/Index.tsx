@@ -92,7 +92,7 @@ export const Index = () => {
         </nav>
         <MenuMobile />
       </header>
-      <main className="container-fluid" style={{ height: "63vh" }}>
+      <main className={`container-fluid`}>
         <Outlet />
       </main>
       <Footer />
