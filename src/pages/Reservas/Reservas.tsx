@@ -3,6 +3,8 @@ import Stack from "react-bootstrap/Stack";
 import { BuscarReservas } from "./BuscarReservas";
 import { ModalCadastrarReserva } from "./ModalCadastrarReserva";
 import { Paginacao } from "./Paginacao";
+import { ModalAtualizarReserva } from "./ModalAtualizarReserva";
+import { ModalExcluirReserva } from "./ModalExcluirReserva";
 
 export const Reservas = () => {
   return (
@@ -31,11 +33,11 @@ export const Reservas = () => {
             </Card.Title>
             <div>
               <span className="text-black d-flex gap-2">
-                Turma: <p className="m-0 text-primary fw-semibold">10</p>
-              </span>
-              <span className="text-black d-flex gap-2">
                 Curso:{" "}
                 <p className="m-0 text-primary fw-semibold">Administração</p>
+              </span>
+              <span className="text-black d-flex gap-2">
+                Turma: <p className="m-0 text-primary fw-semibold">10</p>
               </span>
               <span className="text-black d-flex gap-2">
                 Reserva Início:{" "}
@@ -53,6 +55,10 @@ export const Reservas = () => {
                 Hora Saída:{" "}
                 <p className="m-0 text-primary fw-semibold">17:30H</p>
               </span>
+            </div>
+            <div className="d-flex gap-4 justify-content-between">
+              <ModalAtualizarReserva />
+              <ModalExcluirReserva />
             </div>
           </Card.Body>
         </Card>
