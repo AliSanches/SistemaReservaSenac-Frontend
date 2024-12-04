@@ -6,8 +6,8 @@ import Form from "react-bootstrap/Form";
 
 import { IoAdd } from "react-icons/io5";
 
-export const ModalCadastrarCurso = () => {
-  const [show, setShow] = useState(false);
+export const ModalCadastrarCurso: React.FC = () => {
+  const [show, setShow] = useState<boolean>(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
