@@ -10,7 +10,7 @@ import { IoAdd } from "react-icons/io5";
 import { useMutation } from "@tanstack/react-query";
 
 import { create } from "./api/api";
-import { notify } from "../components/notify";
+import { notify } from "../../components/notify";
 
 export const ModalCadastrarCurso: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);

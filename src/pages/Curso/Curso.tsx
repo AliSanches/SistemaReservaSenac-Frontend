@@ -1,13 +1,25 @@
 import Stack from "react-bootstrap/Stack";
-import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
 
 import { BuscarCurso } from "./BuscarCurso";
 import { ModalCadastrarCurso } from "./ModalCadastrarCurso";
-import { ModalAtualizarCurso } from "./ModalAtualizarCurso";
-import { ModalExcluirCurso } from "./ModalExcluirCurso";
 import { Paginacao } from "./Paginacao";
+import { CardCurso } from "./CardCurso";
+
+import { useQuery } from "@tanstack/react-query";
+
+import { getCursos } from "./api/api";
+
+import { Curso as TipoCurso } from "./api/types";
 
 export const Curso = () => {
+  const { data, isPending } = useQuery({
+    queryKey: ["cursos"],
+    queryFn: getCursos,
+  });
+
+  console.log(data);
+
   return (
     <div className="container-lg">
       <Stack direction="horizontal" gap={3}>
@@ -20,32 +32,20 @@ export const Curso = () => {
       </Stack>
 
       <div
-        className="overflow-x-auto d-flex gap-3 flex-column"
+        className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
         style={{ height: "400px" }}
       >
-        <Card
-          className="my-2 d-flex justify-content-center"
-          style={{ width: "270px" }}
-        >
-          <Card.Img variant="top" src="/curso01.webp" />
-          <Card.Body>
-            <Card.Title className="d-flex gap-2 fw-normal">
-              Curso: <p className="text-primary m-0">Administração</p>
-            </Card.Title>
-            <Card.Text>
-              <span
-                className="text-white d-flex gap-2 px-2 py-1 bg-primary rounded-3"
-                style={{ width: "120px" }}
-              >
-                Graduação
-              </span>
-            </Card.Text>
-            <div className="d-flex gap-4 justify-content-between">
-              <ModalAtualizarCurso />
-              <ModalExcluirCurso />
-            </div>
-          </Card.Body>
-        </Card>
+        {data ? (
+          data.map((index: TipoCurso) => (
+            <CardCurso key={index.id} dadosCurso={index} />
+          ))
+        ) : isPending ? (
+          <div className="d-flex justify-content-center">
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <span>Nada a carregar...</span>
+        )}
       </div>
 
       <Paginacao />
