@@ -18,8 +18,6 @@ export const Curso = () => {
     queryFn: getCursos,
   });
 
-  console.log(data);
-
   return (
     <div className="container-lg">
       <Stack direction="horizontal" gap={3}>
