@@ -8,9 +8,14 @@ import { Usuarios } from "./pages/Usuarios/Usuarios";
 import { Reservas } from "./pages/Reservas/Reservas";
 import { Sala } from "./pages/Sala/Sala";
 
+import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <Router>
+      <ToastContainer stacked />
       <Routes>
         <Route path="/" element={<Login />} />
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -6,11 +7,62 @@ import Form from "react-bootstrap/Form";
 
 import { IoAdd } from "react-icons/io5";
 
+import { useMutation } from "@tanstack/react-query";
+
+import { create } from "./api/api";
+import { notify } from "../components/notify";
+
 export const ModalCadastrarCurso: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [nome, setNome] = useState<string>("");
+  const [categoria, setCategoria] = useState<string>("");
+
+  const categorias = [
+    "Ensino Médio",
+    "Ensino Médio Técnico",
+    "Curso Livre",
+    "Técnico",
+    "Tecnologo",
+    "Graduação",
+    "Pós-Graduação",
+    "Bacharelado",
+    "Licenciatura",
+    "Mestrado",
+    "Doutorado",
+    "Certificação",
+  ];
+
+  const data = {
+    nome: nome,
+    categoria: categoria,
+  };
+
+  const { mutate } = useMutation({
+    mutationFn: async () => create(data),
+    onSuccess: (response) => {
+      if (response?.status === 201) {
+        setNome("");
+        setCategoria("");
+        setShow(false);
+
+        notify(response.data.message, "success");
+      } else if (response?.status === 400) {
+        setNome("");
+        setCategoria("");
+        setShow(false);
+
+        notify(response.data.message, "warning");
+      } else if (response?.status === 500) {
+        setShow(false);
+
+        notify(response.data.message, "error");
+      }
+    },
+  });
 
   return (
     <>
@@ -32,28 +84,38 @@ export const ModalCadastrarCurso: React.FC = () => {
           <Modal.Title>Cadastrar Curso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Nome do curso"
-              className="mb-3"
-            >
-              <Form.Control type="text" placeholder="curso" />
-            </FloatingLabel>
+          <FloatingLabel
+            controlId="floatingInput"
+            label="Nome do curso"
+            className="mb-3"
+          >
+            <Form.Control
+              type="text"
+              placeholder="curso"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </FloatingLabel>
 
-            <Form.Label>Tipo do curso</Form.Label>
-            <Form.Select aria-label="Selecione o tipo do curso">
-              <option value="1">Graduação</option>
-              <option value="1">Técnico</option>
-              <option value="1">Pós graduação</option>
-            </Form.Select>
-          </form>
+          <Form.Label>Tipo do curso</Form.Label>
+          <Form.Select
+            aria-label="Selecione o tipo do curso"
+            onChange={(e) => setCategoria(e.target.value)}
+          >
+            {categorias.map((index, indice) => (
+              <option key={indice} value={index}>
+                {index}
+              </option>
+            ))}
+          </Form.Select>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Voltar
           </Button>
-          <Button variant="primary">Cadastrar</Button>
+          <Button variant="primary" type="submit" onClick={() => mutate()}>
+            Cadastrar
+          </Button>
         </Modal.Footer>
       </Modal>
     </>
