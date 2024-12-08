@@ -14,3 +14,10 @@
 - Axios
 - React Query
 - React Toastify
+
+## Como rodar o sistema
+- Clone esse repositório para sua máquina local
+- Atravès do Visual Studio Code abra o projeto juntamente com o terminal
+- Com o terminal aberto dentro da raiz do projeto digite " npm install " para instalar as dependências
+- Ainda com o terminal aberto digite o proximo comando " npm run dev "
+- Agora basta abrir seu navegador e acessar com o link que ira aparecer em seu terminal
