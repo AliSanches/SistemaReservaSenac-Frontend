@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 
 import { IoAdd } from "react-icons/io5";
 
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { create } from "./api/api";
 import { notify } from "../../components/notify";
@@ -41,10 +41,14 @@ export const ModalCadastrarCurso: React.FC = () => {
     categoria: categoria,
   };
 
+  const queryClient = useQueryClient();
+
   const { mutate } = useMutation({
     mutationFn: async () => create(data),
     onSuccess: (response) => {
       if (response?.status === 201) {
+        queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });
+
         setNome("");
         setCategoria("");
         setShow(false);
