@@ -26,7 +26,7 @@ export const CardCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
             </span>
           </Card.Text>
           <div className="d-flex gap-4 justify-content-between">
-            <ModalAtualizarCurso />
+            <ModalAtualizarCurso dadosCurso={dadosCurso} />
             <ModalExcluirCurso />
           </div>
         </Card.Body>

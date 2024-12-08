@@ -15,6 +15,16 @@ export const create = async (data: Curso) => {
   }
 };
 
+export const update = async (id: number | undefined, data: Curso) => {
+  try {
+    return await axios.put(`${import.meta.env.VITE_API_URL}/curso/${id}`, {
+      data,
+    });
+  } catch {
+    return;
+  }
+};
+
 export const getCursos = async () => {
   try {
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/curso`);
