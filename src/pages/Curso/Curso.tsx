@@ -34,7 +34,7 @@ export const Curso = () => {
         className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
         style={{ height: "400px" }}
       >
-        <Suspense fallback={<h1>Carregando...</h1>}>
+        <Suspense fallback={<Spinner animation="border" variant="primary" />}>
           {data ? (
             data.map((index: TipoCurso) => (
               <CardCurso key={index.id} dadosCurso={index} />

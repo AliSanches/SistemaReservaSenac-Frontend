@@ -5,30 +5,32 @@ import { ModalExcluirCurso } from "./ModalExcluirCurso";
 
 import { DadosCurso } from "./api/types";
 
+import style from "./style/style.module.css";
+
 export const CardCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
   return (
     <>
       <Card
-        className="my-2 d-flex justify-content-center shadow"
-        style={{ width: "270px", height: "300px" }}
+        className={`${style.cardCurso} my-2 d-flex justify-content-center shadow bg-secondary`}
       >
-        <Card.Img variant="top" src="/curso01.webp" />
-        <Card.Body>
-          <Card.Title className="d-flex gap-2 fw-normal">
-            Curso: <p className="text-primary m-0">{dadosCurso.nome}</p>
-          </Card.Title>
+        <Card.Body
+          className={` d-flex p-2 justify-content-between flex-column`}
+        >
           <Card.Text style={{ height: "30px" }}>
             <span
-              className="text-white d-flex gap-2 px-2 py-1 bg-primary rounded-3"
-              style={{ width: "170px" }}
+              className={`${style.transparencia} text-white d-flex gap-2 px-2 py-1 rounded-5 shadow`}
+              style={{ width: "200px" }}
             >
               {dadosCurso.categoria}
             </span>
           </Card.Text>
-          <div className="d-flex gap-4 justify-content-between">
-            <ModalAtualizarCurso dadosCurso={dadosCurso} />
-            <ModalExcluirCurso />
-          </div>
+          <Card.Title className="d-flex flex-column gap-2 fw-normal">
+            <p className="text-white m-0">{dadosCurso.nome}</p>
+            <div className="d-flex gap-4 justify-content-between">
+              <ModalAtualizarCurso dadosCurso={dadosCurso} />
+              <ModalExcluirCurso />
+            </div>
+          </Card.Title>
         </Card.Body>
       </Card>
     </>

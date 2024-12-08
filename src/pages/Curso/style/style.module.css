@@ -1,0 +1,21 @@
+.transparencia {
+  background-color: rgba(150, 150, 150, 0.288);
+}
+
+@media (min-width: 320px) {
+  .cardCurso {
+    background: url("/Card01.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 270px !important;
+    height: 220px !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .cardCurso {
+    width: 340px !important;
+    height: 210px;
+  }
+}
