@@ -7,3 +7,7 @@ export interface Curso {
 export interface DadosCurso {
   dadosCurso: Curso;
 }
+
+export interface IdDadosCurso {
+  idCurso: Curso;
+}

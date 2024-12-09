@@ -34,3 +34,14 @@ export const getCursos = async () => {
     return [];
   }
 };
+
+export const remove = async (id: number | undefined) => {
+  try {
+    return await axios.delete(
+      `${import.meta.env.VITE_API_URL}/curso/${id}`,
+      {}
+    );
+  } catch {
+    return;
+  }
+};

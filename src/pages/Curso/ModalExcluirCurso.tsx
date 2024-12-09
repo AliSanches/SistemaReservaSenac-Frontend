@@ -1,14 +1,42 @@
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
+import { notify } from "../../components/notify";
 
-export const ModalExcluirCurso = () => {
-  const [show, setShow] = useState(false);
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { remove } from "./api/api";
+
+import { IdDadosCurso } from "./api/types";
+
+export const ModalExcluirCurso: React.FC<IdDadosCurso> = ({ idCurso }) => {
+  const [show, setShow] = useState<boolean>(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: async () => remove(idCurso.id),
+    onSuccess: (response) => {
+      if (response?.status === 201) {
+        queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });
+
+        setShow(false);
+
+        notify(response.data.message, "success");
+      } else if (response?.status === 400) {
+        setShow(false);
+
+        notify(response.data.message, "warning");
+      } else if (response?.status === 500) {
+        setShow(false);
+
+        notify(response.data.message, "error");
+      }
+    },
+  });
 
   return (
     <>
@@ -23,33 +51,19 @@ export const ModalExcluirCurso = () => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Excluir Curso</Modal.Title>
+        <Modal.Header className="d-flex flex-column">
+          <Modal.Title>
+            Deseja realmente <span className="text-danger">excluir</span> ?
+          </Modal.Title>
+          <div className="d-flex gap-4 my-3">
+            <Button variant="secondary" onClick={handleClose}>
+              NÃO
+            </Button>
+            <Button variant="danger" type="submit" onClick={() => mutate()}>
+              SIM
+            </Button>
+          </div>
         </Modal.Header>
-        <Modal.Body>
-          <form>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="Nome do curso"
-              className="mb-3"
-            >
-              <Form.Control type="text" placeholder="curso" />
-            </FloatingLabel>
-
-            <Form.Label>Tipo do curso</Form.Label>
-            <Form.Select aria-label="Selecione o tipo do curso">
-              <option value="1">Graduação</option>
-              <option value="1">Técnico</option>
-              <option value="1">Pós graduação</option>
-            </Form.Select>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Voltar
-          </Button>
-          <Button variant="danger">Excluir</Button>
-        </Modal.Footer>
       </Modal>
     </>
   );
