@@ -25,9 +25,13 @@ export const update = async (id: number | undefined, data: Curso) => {
   }
 };
 
-export const getCursos = async () => {
+export const getCursos = async (skip: number) => {
   try {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/curso`);
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/curso`, {
+      params: {
+        skip,
+      },
+    });
 
     return response.data.retorno;
   } catch {
@@ -41,6 +45,16 @@ export const remove = async (id: number | undefined) => {
       `${import.meta.env.VITE_API_URL}/curso/${id}`,
       {}
     );
+  } catch {
+    return;
+  }
+};
+
+export const pagination = async (data: number) => {
+  try {
+    return await axios.get(`${import.meta.env.VITE_API_URL}/curso`, {
+      data,
+    });
   } catch {
     return;
   }

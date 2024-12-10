@@ -7,17 +7,33 @@ import { Paginacao } from "./Paginacao";
 import { CardCurso } from "./CardCurso";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { Suspense } from "react";
+import { Suspense, startTransition } from "react";
 
 import { getCursos } from "./api/api";
+
+import { useState } from "react";
 
 import { Curso as TipoCurso } from "./api/types";
 
 export const Curso = () => {
+  const [skip, setSkip] = useState<number>(0);
+
   const { data, isPending } = useSuspenseQuery({
-    queryKey: ["lista-cursos"],
-    queryFn: getCursos,
+    queryKey: ["lista-cursos", skip],
+    queryFn: async () => await getCursos(skip),
   });
+
+  const qtdPageTotal: number = Math.ceil(data.count / 6);
+
+  const nextPage = () => {
+    startTransition(() => {
+      setSkip((prev) => prev + 6);
+    });
+  };
+
+  const backPage = () => {
+    setSkip((prev) => (prev > 0 ? prev - 6 : 0));
+  };
 
   return (
     <div className="container-lg">
@@ -36,7 +52,7 @@ export const Curso = () => {
       >
         <Suspense fallback={<Spinner animation="border" variant="primary" />}>
           {data ? (
-            data.map((index: TipoCurso) => (
+            data.curso.map((index: TipoCurso) => (
               <CardCurso key={index.id} dadosCurso={index} />
             ))
           ) : isPending ? (
@@ -49,7 +65,12 @@ export const Curso = () => {
         </Suspense>
       </div>
 
-      <Paginacao />
+      <Paginacao
+        nextPage={nextPage}
+        backPage={backPage}
+        totalPages={qtdPageTotal}
+        skip={skip}
+      />
     </div>
   );
 };
