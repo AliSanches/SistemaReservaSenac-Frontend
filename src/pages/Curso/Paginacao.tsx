@@ -18,7 +18,7 @@ export const Paginacao = ({
 
   return (
     <div
-      className={` container-fluid d-flex justify-content-center align-items-end`}
+      className={`container-fluid py-5 d-flex justify-content-center align-items-end`}
     >
       <Pagination>
         <Pagination.Prev onClick={backPage} />
