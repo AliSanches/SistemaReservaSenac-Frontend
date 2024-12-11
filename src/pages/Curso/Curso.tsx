@@ -17,6 +17,7 @@ import { Curso as TipoCurso } from "./api/types";
 
 export const Curso = () => {
   const [skip, setSkip] = useState<number>(0);
+  const [search, setSearch] = useState<string>("");
 
   const { data, isPending } = useSuspenseQuery({
     queryKey: ["lista-cursos", skip],
@@ -35,11 +36,19 @@ export const Curso = () => {
     setSkip((prev) => (prev > 0 ? prev - 6 : 0));
   };
 
+  const filterArray: Array<TipoCurso> = data.curso;
+
+  const filter = search
+    ? filterArray.filter((cursos) =>
+        cursos.nome.toLowerCase().includes(search.toLowerCase())
+      )
+    : filterArray;
+
   return (
     <div className="container-lg">
       <Stack direction="horizontal" gap={3}>
         <div className="">
-          <BuscarCurso />
+          <BuscarCurso search={search} setSearch={setSearch} />
         </div>
         <div className="lh-sm ms-auto mb-3">
           <ModalCadastrarCurso />
@@ -51,8 +60,8 @@ export const Curso = () => {
         style={{ height: "400px" }}
       >
         <Suspense fallback={<Spinner animation="border" variant="primary" />}>
-          {data ? (
-            data.curso.map((index: TipoCurso) => (
+          {filter.length ? (
+            filter.map((index: TipoCurso) => (
               <CardCurso key={index.id} dadosCurso={index} />
             ))
           ) : isPending ? (

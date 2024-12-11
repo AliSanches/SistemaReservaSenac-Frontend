@@ -18,3 +18,8 @@ export interface PagesFN {
   nextPage: () => void;
   backPage: () => void;
 }
+
+export interface Search {
+  search: string;
+  setSearch: string | any;
+}
