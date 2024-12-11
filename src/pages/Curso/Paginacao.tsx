@@ -2,12 +2,7 @@ import Pagination from "react-bootstrap/Pagination";
 
 import style from "./curso.module.css";
 
-interface PagesFN {
-  totalPages: number;
-  skip: number;
-  nextPage: () => void;
-  backPage: () => void;
-}
+import { PagesFN } from "./api/types";
 
 export const Paginacao = ({
   nextPage,
@@ -17,7 +12,7 @@ export const Paginacao = ({
 }: PagesFN) => {
   const paginalAtual = Math.floor(skip / 6) + 1;
 
-  const indice = [];
+  const indice: number[] = [];
 
   for (let i = 1; i <= totalPages; i++) {
     indice.push(i);

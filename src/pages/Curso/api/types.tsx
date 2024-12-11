@@ -11,3 +11,10 @@ export interface DadosCurso {
 export interface IdDadosCurso {
   idCurso: Curso;
 }
+
+export interface PagesFN {
+  totalPages: number;
+  skip: number;
+  nextPage: () => void;
+  backPage: () => void;
+}
