@@ -19,7 +19,7 @@ export const Paginacao = ({
 
   const indice = [];
 
-  for (let i = 0; i <= totalPages; i++) {
+  for (let i = 1; i <= totalPages; i++) {
     indice.push(i);
   }
 
@@ -30,7 +30,7 @@ export const Paginacao = ({
       <Pagination>
         <Pagination.Prev onClick={backPage} />
         {indice.map((index) => (
-          <Pagination.Item active={index === paginalAtual}>
+          <Pagination.Item key={index} active={index === paginalAtual}>
             {index}
           </Pagination.Item>
         ))}
