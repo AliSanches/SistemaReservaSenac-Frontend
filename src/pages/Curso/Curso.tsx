@@ -72,14 +72,14 @@ export const Curso = () => {
             <span>Nada a carregar...</span>
           )}
         </Suspense>
-      </div>
 
-      <Paginacao
-        nextPage={nextPage}
-        backPage={backPage}
-        totalPages={qtdPageTotal}
-        skip={skip}
-      />
+        <Paginacao
+          nextPage={nextPage}
+          backPage={backPage}
+          totalPages={qtdPageTotal}
+          skip={skip}
+        />
+      </div>
     </div>
   );
 };

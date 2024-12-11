@@ -1,7 +1,5 @@
 import Pagination from "react-bootstrap/Pagination";
 
-import style from "./curso.module.css";
-
 import { PagesFN } from "./api/types";
 
 export const Paginacao = ({
@@ -20,7 +18,7 @@ export const Paginacao = ({
 
   return (
     <div
-      className={`${style.paginacao} container-fluid d-flex justify-content-center align-items-end`}
+      className={` container-fluid d-flex justify-content-center align-items-end`}
     >
       <Pagination>
         <Pagination.Prev onClick={backPage} />
