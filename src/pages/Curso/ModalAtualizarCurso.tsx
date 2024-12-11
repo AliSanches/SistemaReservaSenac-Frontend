@@ -12,6 +12,7 @@ import { DadosCurso } from "./api/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { notify } from "../../components/notify";
+import { categorias } from "./constantes";
 
 export const ModalAtualizarCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
   const [show, setShow] = useState(false);
@@ -21,21 +22,6 @@ export const ModalAtualizarCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
 
   const [nome, setNome] = useState<string>(dadosCurso.nome);
   const [categoria, setCategoria] = useState<string>(dadosCurso.categoria);
-
-  const categorias = [
-    "Ensino Médio",
-    "Ensino Médio Técnico",
-    "Curso Livre",
-    "Técnico",
-    "Tecnologo",
-    "Graduação",
-    "Pós-Graduação",
-    "Bacharelado",
-    "Licenciatura",
-    "Mestrado",
-    "Doutorado",
-    "Certificação",
-  ];
 
   const data = {
     nome: nome,

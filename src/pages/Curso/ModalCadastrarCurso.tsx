@@ -11,6 +11,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { create } from "./api/api";
 import { notify } from "../../components/notify";
+import { categorias } from "./constantes";
 
 export const ModalCadastrarCurso: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -20,21 +21,6 @@ export const ModalCadastrarCurso: React.FC = () => {
 
   const [nome, setNome] = useState<string>("");
   const [categoria, setCategoria] = useState<string>("");
-
-  const categorias = [
-    "Ensino Médio",
-    "Ensino Médio Técnico",
-    "Curso Livre",
-    "Técnico",
-    "Tecnologo",
-    "Graduação",
-    "Pós-Graduação",
-    "Bacharelado",
-    "Licenciatura",
-    "Mestrado",
-    "Doutorado",
-    "Certificação",
-  ];
 
   const data = {
     nome: nome,
@@ -98,6 +84,7 @@ export const ModalCadastrarCurso: React.FC = () => {
               placeholder="curso"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
+              required
             />
           </FloatingLabel>
 
@@ -105,6 +92,7 @@ export const ModalCadastrarCurso: React.FC = () => {
           <Form.Select
             aria-label="Selecione o tipo do curso"
             onChange={(e) => setCategoria(e.target.value)}
+            required
           >
             {categorias.map((index, indice) => (
               <option key={indice} value={index}>
