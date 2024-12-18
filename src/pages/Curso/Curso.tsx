@@ -57,7 +57,7 @@ export const Curso = () => {
 
       <div
         className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
-        style={{ height: "400px" }}
+        style={{ height: "auto" }}
       >
         <Suspense fallback={<Spinner animation="border" variant="primary" />}>
           {filter.length ? (
@@ -72,14 +72,14 @@ export const Curso = () => {
             <span>Nada a carregar...</span>
           )}
         </Suspense>
-      </div>
 
-      <Paginacao
-        nextPage={nextPage}
-        backPage={backPage}
-        totalPages={qtdPageTotal}
-        skip={skip}
-      />
+        <Paginacao
+          nextPage={nextPage}
+          backPage={backPage}
+          totalPages={qtdPageTotal}
+          skip={skip}
+        />
+      </div>
     </div>
   );
 };
