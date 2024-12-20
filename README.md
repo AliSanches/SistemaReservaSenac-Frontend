@@ -15,6 +15,8 @@
 - React Query
 - React Toastify
 - Zustand
+- React Hook Forms
+- Zod
 
 ## Como rodar o sistema
 
