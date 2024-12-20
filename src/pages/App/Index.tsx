@@ -5,10 +5,19 @@ import Nav from "react-bootstrap/Nav";
 import style from "./style.module.css";
 import { MenuMobile } from "./MenuMobile";
 
-import { NavLink, Outlet } from "react-router";
+import { NavLink, Outlet, useNavigate } from "react-router";
 import { Footer } from "../Footer/Footer";
+import UserStore from "../../store/userStore";
+import { Button } from "react-bootstrap";
 
 export const Index = () => {
+  const user: any = UserStore();
+  const navigate = useNavigate();
+
+  const logoutUser = () => {
+    user.logout(navigate);
+  };
+
   return (
     <div className="container-fluid p-0" style={{ height: "100vh" }}>
       <div className="container-lg d-flex justify-content-center pt-3">
@@ -80,14 +89,7 @@ export const Index = () => {
             </NavLink>
           </Nav.Item>
           <Nav.Item>
-            <NavLink
-              to={"/"}
-              className={({ isActive }) =>
-                isActive ? `${style.nav} ${style.active}` : style.nav
-              }
-            >
-              SAIR
-            </NavLink>
+            <Button onClick={logoutUser}>SAIR</Button>
           </Nav.Item>
         </nav>
         <MenuMobile />
