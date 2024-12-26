@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 import { Login } from "./pages/Login/Login";
 import { Index } from "./pages/App/Index";
 import { Home } from "./pages/Home/Home";
@@ -11,6 +11,7 @@ import { Sala } from "./pages/Sala/Sala";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import ProtectedRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -19,14 +20,18 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
 
-        <Route path="/app" element={<Index />}>
-          <Route path="/app/home" element={<Home />} />
-          <Route path="/app/curso" element={<Curso />} />
-          <Route path="/app/sala" element={<Sala />} />
-          <Route path="/app/turma" element={<Turma />} />
-          <Route path="/app/reserva" element={<Reservas />} />
-          <Route path="/app/usuarios" element={<Usuarios />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/app" element={<Index />}>
+            <Route path="/app/home" element={<Home />} />
+            <Route path="/app/curso" element={<Curso />} />
+            <Route path="/app/sala" element={<Sala />} />
+            <Route path="/app/turma" element={<Turma />} />
+            <Route path="/app/reserva" element={<Reservas />} />
+            <Route path="/app/usuarios" element={<Usuarios />} />
+          </Route>
         </Route>
+
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
