@@ -31,7 +31,7 @@ export const ModalAtualizarCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async () => update(dadosCurso.id, data),
+    mutationFn: async () => await update(dadosCurso.id, data),
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });

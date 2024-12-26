@@ -3,13 +3,22 @@ import { Curso } from "./types";
 
 export const create = async (data: Curso) => {
   try {
-    return await axios
-      .post(`${import.meta.env.VITE_API_URL}/curso`, {
+    const { token } = JSON.parse(localStorage.getItem("user")!).state;
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/curso`,
+      {
         data,
-      })
-      .then((response) => {
-        return response;
-      });
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response;
   } catch {
     return;
   }
@@ -17,9 +26,20 @@ export const create = async (data: Curso) => {
 
 export const update = async (id: number | undefined, data: Curso) => {
   try {
-    return await axios.put(`${import.meta.env.VITE_API_URL}/curso/${id}`, {
-      data,
-    });
+    const { token } = await JSON.parse(localStorage.getItem("user")!).state;
+
+    return await axios.put(
+      `${import.meta.env.VITE_API_URL}/curso/${id}`,
+      {
+        data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch {
     return;
   }
@@ -27,9 +47,15 @@ export const update = async (id: number | undefined, data: Curso) => {
 
 export const getCursos = async (skip: number) => {
   try {
+    const { token } = await JSON.parse(localStorage.getItem("user")!).state;
+
     const response = await axios.get(`${import.meta.env.VITE_API_URL}/curso`, {
       params: {
         skip,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
@@ -41,10 +67,14 @@ export const getCursos = async (skip: number) => {
 
 export const remove = async (id: number | undefined) => {
   try {
-    return await axios.delete(
-      `${import.meta.env.VITE_API_URL}/curso/${id}`,
-      {}
-    );
+    const { token } = await JSON.parse(localStorage.getItem("user")!).state;
+
+    return await axios.delete(`${import.meta.env.VITE_API_URL}/curso/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
   } catch {
     return;
   }
@@ -52,9 +82,20 @@ export const remove = async (id: number | undefined) => {
 
 export const pagination = async (data: number) => {
   try {
-    return await axios.get(`${import.meta.env.VITE_API_URL}/curso`, {
-      data,
-    });
+    const { token } = await JSON.parse(localStorage.getItem("user")!).state;
+
+    return await axios.post(
+      `${import.meta.env.VITE_API_URL}/curso`,
+      {
+        data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
   } catch {
     return;
   }

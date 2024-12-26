@@ -30,7 +30,7 @@ export const ModalCadastrarCurso: React.FC = () => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async () => create(data),
+    mutationFn: async () => await create(data),
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });

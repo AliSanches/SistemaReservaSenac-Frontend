@@ -18,7 +18,7 @@ export const ModalExcluirCurso: React.FC<IdDadosCurso> = ({ idCurso }) => {
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: async () => remove(idCurso.id),
+    mutationFn: async () => await remove(idCurso.id),
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });
