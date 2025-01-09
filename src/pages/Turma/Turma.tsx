@@ -37,8 +37,7 @@ export const Turma = () => {
             </Card.Title>
             <div>
               <div className="mb-1">
-                Número da turma:{" "}
-                <span className="text-primary fw-semibold">10</span>
+                Turma: <span className="text-primary fw-semibold">10</span>
               </div>
               <div className="mb-1">
                 Data Início:{" "}
@@ -49,12 +48,11 @@ export const Turma = () => {
                 <span className="text-primary fw-semibold">30/12/2025</span>
               </div>
               <div className="mb-1">
-                Hora Início:{" "}
+                Entrada:{" "}
                 <span className="text-primary fw-semibold">13:00H</span>
               </div>
               <div className="mb-1">
-                Hora Término:{" "}
-                <span className="text-primary fw-semibold">17:30H</span>
+                Saída: <span className="text-primary fw-semibold">17:30H</span>
               </div>
             </div>
             <div className="d-flex gap-4 justify-content-between">
