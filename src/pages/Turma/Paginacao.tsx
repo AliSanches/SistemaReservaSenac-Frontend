@@ -1,23 +1,34 @@
 import Pagination from "react-bootstrap/Pagination";
 
-import style from "./Turma.module.css";
+import { PagesFN } from "./api/types";
 
-export const Paginacao = () => {
-  const active: number = 3;
-  const items = [];
-  for (let number = 1; number <= 5; number++) {
-    items.push(
-      <Pagination.Item key={number} active={number === active}>
-        {number}
-      </Pagination.Item>
-    );
+export const Paginacao = ({
+  nextPage,
+  backPage,
+  totalPages,
+  skip,
+}: PagesFN) => {
+  const paginalAtual = Math.floor(skip / 6) + 1;
+
+  const indice: number[] = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    indice.push(i);
   }
 
   return (
     <div
-      className={`${style.paginacao} container-fluid d-flex justify-content-center align-items-end`}
+      className={`container-fluid py-5 d-flex justify-content-center align-items-end`}
     >
-      <Pagination>{items}</Pagination>
+      <Pagination>
+        <Pagination.Prev onClick={backPage} />
+        {indice.map((index) => (
+          <Pagination.Item key={index} active={index === paginalAtual}>
+            {index}
+          </Pagination.Item>
+        ))}
+        <Pagination.Next onClick={nextPage} />
+      </Pagination>
     </div>
   );
 };

@@ -1,18 +1,54 @@
 import Stack from "react-bootstrap/Stack";
-import Card from "react-bootstrap/Card";
+import Spinner from "react-bootstrap/Spinner";
 
 import { BuscarTurma } from "./BuscarTurma";
 import { ModalCadastrarTurma } from "./ModalCadastrarTurma";
-import { ModalAtualizarTurma } from "./ModalAtualizarTurma";
-import { ModalExcluirTurma } from "./ModalExcluirTurma";
 import { Paginacao } from "./Paginacao";
+import { startTransition } from "react";
+
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import { getTurma } from "./api/api";
+import { CardTurma } from "./CardTurma";
+import { Turma as TipoTurma } from "./api/types";
 
 export const Turma = () => {
+  const [skip, setSkip] = useState<number>(0);
+  const [search, setSearch] = useState<string>("");
+
+  const { data, isPending, isLoading } = useQuery({
+    queryKey: ["lista-cursos", skip],
+    queryFn: () => getTurma(skip),
+  });
+
+  if (isLoading) {
+    return <Spinner animation="border" variant="primary" />;
+  }
+
+  const qtdPageTotal: number = Math.ceil(data.count / 6);
+
+  const nextPage = () => {
+    startTransition(() => {
+      setSkip((prev) => prev + 6);
+    });
+  };
+
+  const backPage = () => {
+    setSkip((prev) => (prev > 0 ? prev - 6 : 0));
+  };
+
+  const filterArray: Array<TipoTurma> = data.turma;
+
+  const filter = search
+    ? filterArray.filter((turmas) => turmas.turma)
+    : filterArray;
+
   return (
     <div className="container-lg">
       <Stack direction="horizontal" gap={3}>
         <div className="">
-          <BuscarTurma />
+          <BuscarTurma search={search} setSearch={setSearch} />
         </div>
         <div className="lh-sm ms-auto mb-3">
           <ModalCadastrarTurma />
@@ -20,49 +56,28 @@ export const Turma = () => {
       </Stack>
 
       <div
-        className="overflow-x-auto d-flex gap-3 flex-column"
-        style={{ height: "400px" }}
+        className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
+        style={{ height: "auto" }}
       >
-        <Card
-          className="my-2 d-flex justify-content-center"
-          style={{ width: "270px" }}
-        >
-          <Card.Img variant="top" src="/curso01.webp" />
-          <Card.Body>
-            <Card.Title className="d-flex gap-2 fw-normal">
-              Curso:{" "}
-              <span className="text-primary fw-semibold m-0">
-                Administração
-              </span>
-            </Card.Title>
-            <div>
-              <div className="mb-1">
-                Turma: <span className="text-primary fw-semibold">10</span>
-              </div>
-              <div className="mb-1">
-                Data Início:{" "}
-                <span className="text-primary fw-semibold">10/01/2025</span>
-              </div>
-              <div className="mb-1">
-                Data Término:{" "}
-                <span className="text-primary fw-semibold">30/12/2025</span>
-              </div>
-              <div className="mb-1">
-                Entrada:{" "}
-                <span className="text-primary fw-semibold">13:00H</span>
-              </div>
-              <div className="mb-1">
-                Saída: <span className="text-primary fw-semibold">17:30H</span>
-              </div>
-            </div>
-            <div className="d-flex gap-4 justify-content-between">
-              <ModalAtualizarTurma />
-              <ModalExcluirTurma />
-            </div>
-          </Card.Body>
-        </Card>
+        {isPending ? (
+          <div className="d-flex justify-content-center">
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : filter ? (
+          filter.map((index: TipoTurma) => (
+            <CardTurma key={index.id} dadosTurma={index} />
+          ))
+        ) : (
+          <Spinner animation="border" variant="primary" />
+        )}
+
+        <Paginacao
+          nextPage={nextPage}
+          backPage={backPage}
+          totalPages={qtdPageTotal}
+          skip={skip}
+        />
       </div>
-      <Paginacao />
     </div>
   );
 };

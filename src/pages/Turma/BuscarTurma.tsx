@@ -3,7 +3,9 @@ import InputGroup from "react-bootstrap/InputGroup";
 
 import { FcSearch } from "react-icons/fc";
 
-export const BuscarTurma = () => {
+import { Search } from "./api/types";
+
+export const BuscarTurma: React.FC<Search> = ({ search, setSearch }) => {
   return (
     <>
       <InputGroup className="mb-3">
@@ -14,6 +16,8 @@ export const BuscarTurma = () => {
           placeholder="Buscar turma"
           aria-label="turma"
           aria-describedby="basic-addon1"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </InputGroup>
     </>
