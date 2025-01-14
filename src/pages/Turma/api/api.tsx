@@ -29,7 +29,7 @@ export const update = async (id: number | undefined, data: Turma) => {
     const { token } = await JSON.parse(localStorage.getItem("user")!).state;
 
     return await axios.put(
-      `${import.meta.env.VITE_API_URL}/curso/${id}`,
+      `${import.meta.env.VITE_API_URL}/turma/${id}`,
       {
         data,
       },

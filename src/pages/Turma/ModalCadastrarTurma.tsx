@@ -100,9 +100,6 @@ export const ModalCadastrarTurma = () => {
                   </option>
                 );
               })}
-              {/* {errors.idCurso && (
-                <p className="m-0 pb-1 text-danger">{errors.idCurso.message}</p>
-              )} */}
             </Form.Select>
 
             <Form.Label>Número da turma</Form.Label>
@@ -114,9 +111,6 @@ export const ModalCadastrarTurma = () => {
               {rows.map((index, qtd) => (
                 <option key={index}>{qtd}</option>
               ))}
-              {/* {errors.turma && (
-                <p className="m-0 pb-1 text-danger">{errors.turma.message}</p>
-              )} */}
             </Form.Select>
 
             <Form.Label>Data Início</Form.Label>
