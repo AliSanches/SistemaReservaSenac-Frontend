@@ -18,7 +18,7 @@ export const Turma = () => {
   const [search, setSearch] = useState<string>("");
 
   const { data, isPending, isLoading } = useQuery({
-    queryKey: ["lista-cursos", skip],
+    queryKey: ["lista-turmas", skip],
     queryFn: () => getTurma(skip),
   });
 

@@ -1,5 +1,4 @@
 export interface Turma {
-  cursos?: any;
   id?: number;
   idCurso: string;
   turma: string;
