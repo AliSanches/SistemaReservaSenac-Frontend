@@ -53,7 +53,7 @@ export const CardTurma: React.FC<DadosTurma> = ({ dadosTurma }) => {
           </div>
           <div className="d-flex gap-4 justify-content-between">
             <ModalAtualizarTurma dadosTurma={dadosTurma} />
-            <ModalExcluirTurma />
+            <ModalExcluirTurma dadosTurma={dadosTurma} />
           </div>
         </Card.Body>
       </Card>
