@@ -41,7 +41,11 @@ export const Turma = () => {
   const filterArray: Array<TipoTurma> = data.turma;
 
   const filter = search
-    ? filterArray.filter((turmas) => turmas.turma)
+    ? filterArray
+        .filter((turmas) => turmas.turma)
+        .filter((turmas) =>
+          String(turmas.turma).toLowerCase().includes(search.toLowerCase())
+        )
     : filterArray;
 
   return (
