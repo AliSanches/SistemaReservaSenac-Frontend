@@ -40,14 +40,13 @@ export const ModalExcluirCurso: React.FC<IdDadosCurso> = ({ idCurso }) => {
 
   return (
     <>
-      <Button variant="danger" className="shadow" onClick={handleShow}>
+      <Button variant="danger" onClick={handleShow}>
         Excluir
       </Button>
 
       <Modal
         show={show}
         onHide={handleClose}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >

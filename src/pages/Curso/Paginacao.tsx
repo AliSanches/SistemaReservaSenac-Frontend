@@ -1,6 +1,9 @@
 import Pagination from "react-bootstrap/Pagination";
 
 import { PagesFN } from "./api/types";
+import style from "./style/style.module.css"
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getCursos } from "./api/api";
 
 export const Paginacao = ({
   nextPage,
@@ -16,18 +19,33 @@ export const Paginacao = ({
     indice.push(i);
   }
 
+  const { data } = useSuspenseQuery({
+    queryKey: ["lista-qtdCurso", skip],
+    queryFn: async () => await getCursos(skip),
+  });
+
+
   return (
     <div
       className={`container-fluid py-5 d-flex justify-content-center align-items-end`}
     >
       <Pagination>
-        <Pagination.Prev onClick={backPage} />
+        {paginalAtual > 1 ? (
+          <Pagination.Prev onClick={backPage} />
+        ): (
+          <Pagination.Prev disabled />
+        )}
         {indice.map((index) => (
-          <Pagination.Item key={index} active={index === paginalAtual}>
+          <Pagination.Item className={`${style.page}`} key={index} active={index === paginalAtual}>
             {index}
           </Pagination.Item>
         ))}
-        <Pagination.Next onClick={nextPage} />
+        {data.curso.length > 5 ? (
+          <Pagination.Next className={`${style.pageNoneRelative}`} onClick={nextPage} />
+        ) : (
+          <Pagination.Next disabled />
+        )
+        }
       </Pagination>
     </div>
   );

@@ -11,7 +11,12 @@ export const CardCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
   return (
     <>
       <Card
-        className={`${style.cardCurso} my-2 d-flex justify-content-center shadow bg-secondary`}
+        className={`${style.cardCurso} my-2 d-flex justify-content-center shadow bg-secondary`} style={{
+          // backgroundImage: `url(${dadosCurso.imagem})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
       >
         <Card.Body
           className={` d-flex p-2 justify-content-between flex-column`}

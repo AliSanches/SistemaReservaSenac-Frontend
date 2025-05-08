@@ -63,16 +63,16 @@ export const Turma = () => {
         className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
         style={{ height: "auto" }}
       >
-        {isPending ? (
-          <div className="d-flex justify-content-center">
-            <Spinner animation="border" variant="primary" />
-          </div>
-        ) : filter ? (
+        {filter.length ? (
           filter.map((index: TipoTurma) => (
             <CardTurma key={index.id} dadosTurma={index} />
           ))
+        ) : isPending ? (
+          <div className="d-flex justify-content-center">
+            <Spinner animation="border" variant="primary" />
+          </div> 
         ) : (
-          <Spinner animation="border" variant="primary" />
+          <span>Nada a carregar...</span>
         )}
 
         <Paginacao

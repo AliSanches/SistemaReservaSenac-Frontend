@@ -43,12 +43,17 @@ const UserStore = create(
 
             notify(response.data.message, "success");
             navigate("/app/home");
-          } else if (response.status === 400) {
-            notify(response.data.message, "warning");
-          } else if (response.status === 500) {
-            notify(response.data.message, "error");
           }
-        } catch {
+
+        } catch(error: any) {
+          if (error.response) {
+            if (error.response.status === 401) {
+              notify(error.response.data.message, 'warning');
+            }
+            else if (error.response.status === 500) {
+              notify(error.response.data.message, 'error');
+            }
+          }
           return null;
         }
       },

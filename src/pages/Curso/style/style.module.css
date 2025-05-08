@@ -2,12 +2,18 @@
   background-color: rgba(150, 150, 150, 0.288);
 }
 
+.page {
+  z-index: -3;
+  cursor: none;
+  position: none;
+}
+
+.pageNoneRelative {
+  position: none;
+}
+
 @media (min-width: 320px) {
   .cardCurso {
-    background: url("/Card01.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
     width: 270px !important;
     height: 220px !important;
   }

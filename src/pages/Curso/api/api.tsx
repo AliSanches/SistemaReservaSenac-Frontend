@@ -1,6 +1,31 @@
 import axios from "axios";
 import { Curso } from "./types";
 
+
+export const uploadFile = async (file: any) => {
+  try {
+    const { token } = JSON.parse(localStorage.getItem("user")!).state;
+
+    const data = new FormData();
+    data.append('arquivo', file)
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/files`,
+        data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    return null;
+  }
+}
+
 export const create = async (data: Curso) => {
   try {
     const { token } = JSON.parse(localStorage.getItem("user")!).state;

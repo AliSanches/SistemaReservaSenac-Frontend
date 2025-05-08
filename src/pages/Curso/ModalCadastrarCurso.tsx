@@ -9,11 +9,17 @@ import { IoAdd } from "react-icons/io5";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { create } from "./api/api";
+import { create, uploadFile } from "./api/api";
 import { notify } from "../../components/notify";
 import { categorias } from "./constantes";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormSchema } from "./FormCurso/FormShema";
 
-export const ModalCadastrarCurso: React.FC = () => {
+type FormData = z.infer<typeof FormSchema>;
+
+export const ModalCadastrarCurso: React.FC = () => {  
   const [show, setShow] = useState<boolean>(false);
 
   const handleClose = () => setShow(false);
@@ -21,6 +27,15 @@ export const ModalCadastrarCurso: React.FC = () => {
 
   const [nome, setNome] = useState<string>("");
   const [categoria, setCategoria] = useState<string>("");
+  const [imagem, setImagem] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(FormSchema),
+  });
 
   const data = {
     nome: nome,
@@ -28,6 +43,10 @@ export const ModalCadastrarCurso: React.FC = () => {
   };
 
   const queryClient = useQueryClient();
+
+  const { mutate: upload} = useMutation({
+    mutationFn: async () => await uploadFile(imagem),
+  });
 
   const { mutate } = useMutation({
     mutationFn: async () => await create(data),
@@ -54,6 +73,11 @@ export const ModalCadastrarCurso: React.FC = () => {
     },
   });
 
+  const Data = () => {
+    mutate();
+    upload();
+  }
+
   return (
     <>
       <button
@@ -74,38 +98,47 @@ export const ModalCadastrarCurso: React.FC = () => {
           <Modal.Title>Cadastrar Curso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FloatingLabel
-            controlId="floatingInput"
-            label="Nome do curso"
-            className="mb-3"
-          >
-            <Form.Control
-              type="text"
-              placeholder="curso"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-            />
-          </FloatingLabel>
+          <form onSubmit={handleSubmit(Data)}>
+            <FloatingLabel
+                controlId="floatingInput"
+                label="Nome do curso"
+                className="mb-3"
+            >
+              <Form.Control
+                  type="text"
+                  placeholder="curso"
+                  {...register("curso")}
+              />
+              {errors.curso && (
+                  <p className="m-0 py-1 text-danger">{errors.curso.message}</p>
+                )}
+            </FloatingLabel>
 
-          <Form.Label>Tipo do curso</Form.Label>
-          <Form.Select
-            aria-label="Selecione o tipo do curso"
-            onChange={(e) => setCategoria(e.target.value)}
-            required
-          >
-            {categorias.map((index, indice) => (
-              <option key={indice} value={index}>
-                {index}
-              </option>
-            ))}
-          </Form.Select>
+            <Form.Label>Tipo do curso</Form.Label>
+            <Form.Select
+              aria-label="Selecione o tipo do curso"
+              onChange={(e) => setCategoria(e.target.value)}
+              required
+              className="mb-3"
+            >
+              {categorias.map((index, indice) => (
+                <option key={indice} value={index}>
+                  {index}
+                </option>
+              ))}
+            </Form.Select>
+
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Imagem do curso</Form.Label>
+              <Form.Control type="file" onChange={(e) => setImagem(e.target.files[0])}/>
+            </Form.Group>
+          </form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Voltar
           </Button>
-          <Button variant="primary" type="submit" onClick={() => mutate()}>
+          <Button variant="primary" type="submit" onClick={Data}>
             Cadastrar
           </Button>
         </Modal.Footer>
