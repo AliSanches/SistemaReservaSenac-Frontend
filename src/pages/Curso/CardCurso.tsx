@@ -7,15 +7,18 @@ import { DadosCurso } from "./api/types";
 
 import style from "./style/style.module.css";
 
+
+
 export const CardCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
+  const imagemUrl = `${import.meta.env.VITE_API_URL}/uploads/${dadosCurso.arquivo}`;
   return (
     <>
       <Card
         className={`${style.cardCurso} my-2 d-flex justify-content-center shadow bg-secondary`} style={{
-          // backgroundImage: `url(${dadosCurso.imagem})`,
+          backgroundImage: `url(${imagemUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
+          backgroundRepeat: 'no-repeat',
         }}
       >
         <Card.Body
@@ -24,7 +27,7 @@ export const CardCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
           <Card.Text style={{ height: "30px" }}>
             <span
               className={`${style.transparencia} text-white d-flex gap-2 px-2 py-1 rounded-5 shadow`}
-              style={{ width: "200px" }}
+              style={{ width: "200px" }} 
             >
               {dadosCurso.categoria}
             </span>

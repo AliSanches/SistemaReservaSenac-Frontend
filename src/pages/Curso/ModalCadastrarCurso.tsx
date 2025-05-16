@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Stack from 'react-bootstrap/Stack';
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
@@ -9,7 +10,7 @@ import { IoAdd } from "react-icons/io5";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { create, uploadFile } from "./api/api";
+import { create } from "./api/api";
 import { notify } from "../../components/notify";
 import { categorias } from "./constantes";
 import { useForm } from "react-hook-form";
@@ -19,15 +20,16 @@ import { FormSchema } from "./FormCurso/FormShema";
 
 type FormData = z.infer<typeof FormSchema>;
 
-export const ModalCadastrarCurso: React.FC = () => {  
+export const ModalCadastrarCurso: React.FC = () => {
+  const queryClient = useQueryClient();  
   const [show, setShow] = useState<boolean>(false);
+  const [imagem, setImagem] = useState<File | undefined >(undefined);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
-  const [nome, setNome] = useState<string>("");
-  const [categoria, setCategoria] = useState<string>("");
-  const [imagem, setImagem] = useState(null);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setImagem(event.target.files?.[0]);
+  };
 
   const {
     register,
@@ -37,31 +39,15 @@ export const ModalCadastrarCurso: React.FC = () => {
     resolver: zodResolver(FormSchema),
   });
 
-  const data = {
-    nome: nome,
-    categoria: categoria,
-  };
-
-  const queryClient = useQueryClient();
-
-  const { mutate: upload} = useMutation({
-    mutationFn: async () => await uploadFile(imagem),
-  });
-
   const { mutate } = useMutation({
-    mutationFn: async () => await create(data),
+    mutationFn: async ({ data, imagem }: { data: FormData; imagem: File }) => await create(data, imagem),
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });
-
-        setNome("");
-        setCategoria("");
         setShow(false);
 
         notify(response.data.message, "success");
       } else if (response?.status === 400) {
-        setNome("");
-        setCategoria("");
         setShow(false);
 
         notify(response.data.message, "warning");
@@ -73,10 +59,14 @@ export const ModalCadastrarCurso: React.FC = () => {
     },
   });
 
-  const Data = () => {
-    mutate();
-    upload();
+  const onSubmit = (data: FormData) => {
+  if (!imagem) {
+    notify("Imagem é obrigatória", "warning");
+    return;
   }
+
+  mutate({ data, imagem });
+};
 
   return (
     <>
@@ -98,7 +88,7 @@ export const ModalCadastrarCurso: React.FC = () => {
           <Modal.Title>Cadastrar Curso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleSubmit(Data)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <FloatingLabel
                 controlId="floatingInput"
                 label="Nome do curso"
@@ -107,19 +97,19 @@ export const ModalCadastrarCurso: React.FC = () => {
               <Form.Control
                   type="text"
                   placeholder="curso"
-                  {...register("curso")}
+                  {...register("nome")}
               />
-              {errors.curso && (
-                  <p className="m-0 py-1 text-danger">{errors.curso.message}</p>
+              {errors.nome && (
+                  <p className="m-0 py-1 text-danger">{errors.nome.message}</p>
                 )}
             </FloatingLabel>
 
             <Form.Label>Tipo do curso</Form.Label>
             <Form.Select
               aria-label="Selecione o tipo do curso"
-              onChange={(e) => setCategoria(e.target.value)}
               required
               className="mb-3"
+              {...register("categoria")}
             >
               {categorias.map((index, indice) => (
                 <option key={indice} value={index}>
@@ -127,21 +117,25 @@ export const ModalCadastrarCurso: React.FC = () => {
                 </option>
               ))}
             </Form.Select>
+            {errors.categoria && (
+              <p className="m-0 py-1 text-danger">{errors.categoria.message}</p>
+            )}
 
             <Form.Group controlId="formFile" className="mb-3">
               <Form.Label>Imagem do curso</Form.Label>
-              <Form.Control type="file" onChange={(e) => setImagem(e.target.files[0])}/>
+              <Form.Control type="file" onChange={handleFileChange}/>
             </Form.Group>
+
+             <Stack direction="horizontal" gap={5}>
+              <Button variant="secondary" onClick={handleClose}>
+                Voltar
+              </Button>
+              <Button variant="primary" type="submit">
+                Cadastrar
+              </Button>
+             </Stack>
           </form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Voltar
-          </Button>
-          <Button variant="primary" type="submit" onClick={Data}>
-            Cadastrar
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

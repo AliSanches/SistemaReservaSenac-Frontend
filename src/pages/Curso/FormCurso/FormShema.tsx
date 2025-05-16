@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const FormSchema = z.object({
-  curso: z
+  nome: z
     .string()
     .min(5, { message: "Nome do curso obrigatório" }),
+  categoria: z
+    .string(),
 });

@@ -26,25 +26,29 @@ export const uploadFile = async (file: any) => {
   }
 }
 
-export const create = async (data: Curso) => {
+export const create = async (data: Curso, arquivo: File) => {
   try {
     const { token } = JSON.parse(localStorage.getItem("user")!).state;
 
+    const formData = new FormData();
+    formData.append("arquivo", arquivo);
+    formData.append("nome", data.nome);
+    formData.append("categoria", data.categoria);
+
+
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/curso`,
-      {
-        data,
-      },
+      formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
         },
       }
     );
 
     return response;
-  } catch {
+  } catch (err) {
+    console.error("Erro ao criar curso:", err);
     return;
   }
 };
