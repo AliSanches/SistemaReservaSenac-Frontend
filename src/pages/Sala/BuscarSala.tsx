@@ -1,9 +1,9 @@
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-
+import Form         from "react-bootstrap/Form";
+import InputGroup   from "react-bootstrap/InputGroup";
+import { Search }   from "./api/types";
 import { FcSearch } from "react-icons/fc";
 
-export const BuscarSala = () => {
+export const BuscarSala: React.FC<Search> = ({ search, setSearch }) => {
   return (
     <>
       <InputGroup className="mb-3">
@@ -14,6 +14,8 @@ export const BuscarSala = () => {
           placeholder="Buscar sala"
           aria-label="sala"
           aria-describedby="basic-addon1"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </InputGroup>
     </>

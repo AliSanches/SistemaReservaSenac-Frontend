@@ -4,6 +4,7 @@ export interface Sala {
   idTurma: string;
   numeroSala: string;
   capacidade: string;
+  tipoSala: string;
   case: string;
   comportaNotebook: string;
 }

@@ -1,12 +1,21 @@
-import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useQuery } from "@tanstack/react-query";
+import Spinner from "react-bootstrap/Spinner";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IoAdd } from "react-icons/io5";
 import { getCursos } from "../Curso/api/api";
+import { getTurma } from "../Turma/api/api";
 import { Curso as TipoCurso } from "../Curso/api/types";
-import Spinner from "react-bootstrap/Spinner";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormSchema } from "./FormCadSala/FormSchema";
+import { notify } from "../../components/notify";
+import { create } from "./api/api";
+
+type FormData = z.infer<typeof FormSchema>;
 
 export const ModalCadastrarSala = () => {
   const [show, setShow] = useState<boolean>(false);
@@ -27,12 +36,50 @@ export const ModalCadastrarSala = () => {
     sala.push(i);
   }
 
-  const { data, isLoading } = useQuery({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  const { data: cursos, isLoading: loadingCursos } = useQuery({
     queryKey: ["lista-cursos", skip],
     queryFn: () => getCursos(skip),
   });
+  
+  const { data: turmas, isLoading: loadingTurmas } = useQuery({
+    queryKey: ["lista-turmas", skip],
+    queryFn: () => getTurma(skip),
+  });
 
-  if (isLoading) {
+
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: async (data: FormData) => await create(data),
+    onSuccess: (response) => {
+      if (response?.status === 201) {
+        queryClient.invalidateQueries({ queryKey: ["lista-salas"] });
+        setShow(false);
+        reset(), notify(response.data.message, "success");
+      } else if (response?.status === 400) {
+        setShow(false);
+        reset(), notify(response.data.message, "warning");
+      } else if (response?.status === 500) {
+        setShow(false);
+        reset(), notify(response.data.message, "error");
+      }
+    },
+  });
+
+  if (loadingCursos) {
+    return <Spinner animation="border" variant="primary" />;
+  }
+
+  if (loadingTurmas) {
     return <Spinner animation="border" variant="primary" />;
   }
 
@@ -56,39 +103,42 @@ export const ModalCadastrarSala = () => {
           <Modal.Title>Cadastrar Sala</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form>
+          <form onSubmit={handleSubmit((data) => mutate(data))}>
             <Form.Label>Curso</Form.Label>
-            <Form.Select aria-label="Nome do curso" className="mb-3">
-              {data.curso.map((index: TipoCurso) => (
+            <Form.Select aria-label="Nome do curso" className="mb-3" {...register("idCurso")}>
+              {cursos.curso.map((index: TipoCurso) => (
                 <option key={index.id}>{index.nome}</option>
               ))}
             </Form.Select>
 
             <Form.Label>Turma</Form.Label>
-            <Form.Select aria-label="Turma" className="mb-3">
-              {sala.map((index, qtd) => (
-                <option key={index}>{qtd}</option>
+            <Form.Select aria-label="Turma" className="mb-3" {...register("idTurma")}>
+              {turmas.turma.map((index: any) => (
+                <option key={index.id}>{index.nome}</option>
               ))}
             </Form.Select>
 
             <Form.Label>Número da sala</Form.Label>
-            <Form.Select aria-label="Número da sala" className="mb-3">
+            <Form.Select aria-label="Número da sala" className="mb-3" {...register("numeroSala")}>
               {sala.map((index, qtd) => (
                 <option key={index}>{qtd}</option>
               ))}
             </Form.Select>
 
             <Form.Label>Capacidade de alunos</Form.Label>
-            <Form.Control type="number" maxLength={3} className="mb-3" />
+            <Form.Control type="number" maxLength={3} className="mb-3" {...register("capacidade")}/>
+            {errors.capacidade && (
+              <p className="m-0 pb-1 text-danger">{errors.capacidade.message}</p>
+            )}
 
             <Form.Label>Tipo da Sala</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3">
+            <Form.Select aria-label="Tipo da sala" className="mb-3" {...register("case")}>
               <option value="lb-informatica">Laboratório de Informática</option>
               <option value="lb-farmacia">Laboratório de Farmácia</option>
             </Form.Select>
 
             <Form.Label>Case (armário)</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3">
+            <Form.Select aria-label="Tipo da sala" className="mb-3" {...register("comportaNotebook")}>
               <option value="sim">Sim</option>
               <option value="nao">Não</option>
             </Form.Select>

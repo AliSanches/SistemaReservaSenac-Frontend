@@ -1,6 +1,6 @@
-import Card from "react-bootstrap/Card";
+import Card                    from "react-bootstrap/Card";
 import { ModalAtualizarTurma } from "./ModalAtualizarTurma";
-import { ModalExcluirTurma } from "./ModalExcluirTurma";
+import { ModalExcluirTurma }   from "./ModalExcluirTurma";
 
 import { DadosTurma } from "./api/types";
 
