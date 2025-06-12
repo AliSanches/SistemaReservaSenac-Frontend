@@ -53,15 +53,18 @@ export const create = async (data: Curso, arquivo: File) => {
   }
 };
 
-export const update = async (id: number | undefined, data: Curso) => {
+export const update = async (id: number | undefined, data: Curso,  arquivo: File) => {
   try {
     const { token } = await JSON.parse(localStorage.getItem("user")!).state;
 
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("arquivo", arquivo);
+    formData.append("nome", data.nome);
+    formData.append("categoria", data.categoria);
+
     return await axios.put(
-      `${import.meta.env.VITE_API_URL}/curso/${id}`,
-      {
-        data,
-      },
+      `${import.meta.env.VITE_API_URL}/curso/${id}`,{formData},
       {
         headers: {
           Authorization: `Bearer ${token}`,

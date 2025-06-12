@@ -60,13 +60,13 @@ export const ModalCadastrarCurso: React.FC = () => {
   });
 
   const onSubmit = (data: FormData) => {
-  if (!imagem) {
-    notify("Imagem é obrigatória", "warning");
+    if (!imagem) {
+      notify("Imagem é obrigatória", "warning");
     return;
-  }
+    }
 
-  mutate({ data, imagem });
-};
+    mutate({ data, imagem });
+  };
 
   return (
     <>
@@ -95,9 +95,9 @@ export const ModalCadastrarCurso: React.FC = () => {
                 className="mb-3"
             >
               <Form.Control
-                  type="text"
-                  placeholder="curso"
-                  {...register("nome")}
+                type="text"
+                placeholder="curso"
+                {...register("nome")}
               />
               {errors.nome && (
                   <p className="m-0 py-1 text-danger">{errors.nome.message}</p>
