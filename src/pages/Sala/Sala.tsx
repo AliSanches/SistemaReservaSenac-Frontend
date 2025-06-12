@@ -1,18 +1,51 @@
-import Stack from "react-bootstrap/Stack";
-import Card from "react-bootstrap/Card";
-
-import { BuscarSala } from "./BuscarSala";
+import Stack                  from "react-bootstrap/Stack";
+import Spinner                from "react-bootstrap/Spinner";
+import { Suspense, startTransition }  from "react";
+import { useState }           from "react";
+import { BuscarSala }         from "./BuscarSala";
 import { ModalCadastrarSala } from "./ModalCadastrarSala";
-import { ModalAtualizarSala } from "./ModalAtualizarSala";
-import { ModalExcluirSala } from "./ModalExcluirSala";
-import { Paginacao } from "./Paginacao";
+import { Paginacao }          from "./Paginacao";
+import { useSuspenseQuery }   from "@tanstack/react-query";
+import { getSala }            from "./api/api";
+import { Sala as TipoSala }   from "./api/types";
+import { CardSala }           from "./CardSala";
 
 export const Sala = () => {
+  const [skip, setSkip] = useState<number>(0);
+  const [search, setSearch] = useState<string>("");
+
+  const { data, isPending } = useSuspenseQuery({
+    queryKey: ["lista-salas"],
+    queryFn: async () => await getSala(skip),
+  });
+
+  const qtdPageTotal: number = Math.ceil(data.count / 6);
+  
+  const nextPage = () => {
+    startTransition(() => {
+      setSkip((prev) => prev + 6);
+    });
+  };
+
+  const backPage = () => {
+    setSkip((prev) => (prev > 0 ? prev - 6 : 0));
+  };
+
+  const filterArray: Array<TipoSala> = data.sala;
+
+  const filter = search
+    ? filterArray
+      .filter((salas) => salas.numeroSala)
+      .filter((salas) =>
+        String(salas.numeroSala).toLowerCase().includes(search.toLowerCase())
+      )
+    : filterArray;
+
   return (
     <div className="container-lg">
       <Stack direction="horizontal" gap={3}>
         <div className="">
-          <BuscarSala />
+          <BuscarSala search={search} setSearch={setSearch}/>
         </div>
         <div className="lh-sm ms-auto mb-3">
           <ModalCadastrarSala />
@@ -20,51 +53,30 @@ export const Sala = () => {
       </Stack>
 
       <div
-        className="overflow-x-auto d-flex gap-3 flex-column"
-        style={{ height: "400px" }}
+        className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
+        style={{ height: "auto" }}
       >
-        <Card
-          className="my-2 d-flex justify-content-center"
-          style={{ width: "270px" }}
-        >
-          <Card.Img variant="top" src="/curso01.webp" />
-          <Card.Body>
-            <Card.Title className="d-flex gap-2 fw-normal">
-              Curso:{" "}
-              <span className="text-primary fw-semibold m-0">
-                Administração
-              </span>
-            </Card.Title>
-            <div>
-              <div className="mb-1">
-                Número da sala:{" "}
-                <span className="text-primary fw-semibold">401</span>
-              </div>
-              <div className="mb-1">
-                Capacidade de Alunos:{" "}
-                <span className="text-primary fw-semibold">30</span>
-              </div>
-              <div className="mb-1">
-                Tipo da Sala:{" "}
-                <span className="text-primary fw-semibold">Informatica</span>
-              </div>
-              <div className="mb-1">
-                Case (armário):{" "}
-                <span className="text-primary fw-semibold">Sim</span>
-              </div>
-              <div className="mb-1">
-                Comporta Notebook:{" "}
-                <span className="text-primary fw-semibold">Não</span>
-              </div>
-            </div>
-            <div className="d-flex gap-4 justify-content-between">
-              <ModalAtualizarSala />
-              <ModalExcluirSala />
-            </div>
-          </Card.Body>
-        </Card>
+        <Suspense fallback={<Spinner animation="border" variant="primary" />}>
+          {filter.length ? (
+            filter.map((index: TipoSala) => (
+              <CardSala key={index.id} dadosSala={index} />
+            ))
+          ) : isPending ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" variant="primary" />
+            </div> 
+          ) : (
+            <span>Nada a carregar...</span>
+          )}
+        </Suspense>
+
+        <Paginacao
+          nextPage={nextPage}
+          backPage={backPage}
+          totalPages={qtdPageTotal}
+          skip={skip}
+        />
       </div>
-      <Paginacao />
     </div>
   );
 };

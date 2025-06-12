@@ -1,9 +1,8 @@
-import Pagination from "react-bootstrap/Pagination";
-
+import Pagination  from "react-bootstrap/Pagination";
 import { PagesFN } from "./api/types";
-import style from "./style/style.module.css"
+import style       from "./style/style.module.css"
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getCursos } from "./api/api";
+import { getCursos }        from "./api/api";
 
 export const Paginacao = ({
   nextPage,
@@ -23,7 +22,6 @@ export const Paginacao = ({
     queryKey: ["lista-qtdCurso", skip],
     queryFn: async () => await getCursos(skip),
   });
-
 
   return (
     <div

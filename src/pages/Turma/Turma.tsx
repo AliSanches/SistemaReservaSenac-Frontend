@@ -1,30 +1,23 @@
-import Stack from "react-bootstrap/Stack";
-import Spinner from "react-bootstrap/Spinner";
-
-import { BuscarTurma } from "./BuscarTurma";
+import Stack                   from "react-bootstrap/Stack";
+import Spinner                 from "react-bootstrap/Spinner";
+import { BuscarTurma }         from "./BuscarTurma";
 import { ModalCadastrarTurma } from "./ModalCadastrarTurma";
-import { Paginacao } from "./Paginacao";
-import { startTransition } from "react";
-
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-
-import { getTurma } from "./api/api";
-import { CardTurma } from "./CardTurma";
-import { Turma as TipoTurma } from "./api/types";
+import { Paginacao }           from "./Paginacao";
+import { startTransition, Suspense } from "react";
+import { useState }            from "react";
+import { useSuspenseQuery }    from "@tanstack/react-query";
+import { getTurma }            from "./api/api";
+import { CardTurma }           from "./CardTurma";
+import { Turma as TipoTurma }  from "./api/types";
 
 export const Turma = () => {
   const [skip, setSkip] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
 
-  const { data, isPending, isLoading } = useQuery({
+  const { data, isPending } = useSuspenseQuery({
     queryKey: ["lista-turmas", skip],
-    queryFn: () => getTurma(skip),
+    queryFn: async () => await getTurma(skip),
   });
-
-  if (isLoading) {
-    return <Spinner animation="border" variant="primary" />;
-  }
 
   const qtdPageTotal: number = Math.ceil(data.count / 6);
 
@@ -42,10 +35,10 @@ export const Turma = () => {
 
   const filter = search
     ? filterArray
-        .filter((turmas) => turmas.turma)
-        .filter((turmas) =>
-          String(turmas.turma).toLowerCase().includes(search.toLowerCase())
-        )
+      .filter((turmas) => turmas.turma)
+      .filter((turmas) =>
+        String(turmas.turma).toLowerCase().includes(search.toLowerCase())
+      )
     : filterArray;
 
   return (
@@ -63,17 +56,19 @@ export const Turma = () => {
         className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
         style={{ height: "auto" }}
       >
-        {filter.length ? (
-          filter.map((index: TipoTurma) => (
-            <CardTurma key={index.id} dadosTurma={index} />
-          ))
-        ) : isPending ? (
-          <div className="d-flex justify-content-center">
-            <Spinner animation="border" variant="primary" />
-          </div> 
-        ) : (
-          <span>Nada a carregar...</span>
-        )}
+        <Suspense fallback={<Spinner animation="border" variant="primary" />}>
+          {filter.length ? (
+            filter.map((index: TipoTurma) => (
+              <CardTurma key={index.id} dadosTurma={index} />
+            ))
+          ) : isPending ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" variant="primary" />
+            </div> 
+          ) : (
+            <span>Nada a carregar...</span>
+          )}
+        </Suspense>
 
         <Paginacao
           nextPage={nextPage}

@@ -1,0 +1,13 @@
+.transparencia {
+  background-color: rgba(150, 150, 150, 0.288);
+}
+
+.page {
+  z-index: -3;
+  cursor: none;
+  position: none;
+}
+
+.pageNoneRelative {
+  position: none;
+}
