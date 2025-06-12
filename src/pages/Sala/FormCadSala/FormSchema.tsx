@@ -5,6 +5,7 @@ export const FormSchema = z.object({
   idTurma: z.string().min(1, { message: "Turma Invalida!" }),
   numeroSala: z.string().min(1),
   capacidade: z.string().min(5),
+  tipoSala: z.string(),
   case: z.string(),
   comportaNotebook: z.string(),
 });

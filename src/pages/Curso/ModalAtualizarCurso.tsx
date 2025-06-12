@@ -1,18 +1,13 @@
-import { useState } from "react";
-
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
-
-import { update } from "./api/api";
-
-import { DadosCurso } from "./api/types";
-
+import { useState }       from "react";
+import Modal              from "react-bootstrap/Modal";
+import Button             from "react-bootstrap/Button";
+import FloatingLabel      from "react-bootstrap/FloatingLabel";
+import Form               from "react-bootstrap/Form";
+import { update }         from "./api/api";
+import { DadosCurso }     from "./api/types";
+import { notify }         from "../../components/notify";
+import { categorias }     from "./constantes";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { notify } from "../../components/notify";
-import { categorias } from "./constantes";
 
 export const ModalAtualizarCurso: React.FC<DadosCurso> = ({ dadosCurso }) => {
   const [show, setShow] = useState(false);

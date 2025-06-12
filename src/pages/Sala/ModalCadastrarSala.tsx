@@ -1,19 +1,19 @@
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
-import { useState } from "react";
+import Modal         from "react-bootstrap/Modal";
+import Button        from "react-bootstrap/Button";
+import Form          from "react-bootstrap/Form";
+import Spinner       from "react-bootstrap/Spinner";
+import { useState }  from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IoAdd } from "react-icons/io5";
+import { IoAdd }     from "react-icons/io5";
 import { getCursos } from "../Curso/api/api";
-import { getTurma } from "../Turma/api/api";
+import { getTurma }  from "../Turma/api/api";
 import { Curso as TipoCurso } from "../Curso/api/types";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useForm }   from "react-hook-form";
+import { z }         from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSchema } from "./FormCadSala/FormSchema";
-import { notify } from "../../components/notify";
-import { create } from "./api/api";
+import { FormSchema }from "./FormCadSala/FormSchema";
+import { notify }    from "../../components/notify";
+import { create }    from "./api/api";
 
 type FormData = z.infer<typeof FormSchema>;
 
