@@ -1,19 +1,14 @@
-import Stack from "react-bootstrap/Stack";
-import Spinner from "react-bootstrap/Spinner";
-
-import { BuscarCurso } from "./BuscarCurso";
-import { ModalCadastrarCurso } from "./ModalCadastrarCurso";
-import { Paginacao } from "./Paginacao";
-import { CardCurso } from "./CardCurso";
-
+import Stack                from "react-bootstrap/Stack";
+import Spinner              from "react-bootstrap/Spinner";
+import { BuscarCurso }      from "./BuscarCurso";
+import { Paginacao }        from "./Paginacao";
+import { CardCurso }        from "./CardCurso";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { getCursos }        from "./api/api";
+import { useState }         from "react";
+import { ModalCadastrarCurso }       from "./ModalCadastrarCurso";
 import { Suspense, startTransition } from "react";
-
-import { getCursos } from "./api/api";
-
-import { useState } from "react";
-
-import { Curso as TipoCurso } from "./api/types";
+import { Curso as TipoCurso }        from "./api/types";
 
 export const Curso = () => {
   const [skip, setSkip] = useState<number>(0);

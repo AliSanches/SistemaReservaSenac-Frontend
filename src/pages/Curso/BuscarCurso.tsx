@@ -1,8 +1,7 @@
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-
+import Form         from "react-bootstrap/Form";
+import InputGroup   from "react-bootstrap/InputGroup";
 import { FcSearch } from "react-icons/fc";
-import { Search } from "./api/types";
+import { Search }   from "./api/types";
 
 export const BuscarCurso: React.FC<Search> = ({ search, setSearch }) => {
   return (

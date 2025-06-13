@@ -1,13 +1,10 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import { notify } from "../../components/notify";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { remove } from "./api/api";
-
+import { useState }     from "react";
+import Modal            from "react-bootstrap/Modal";
+import Button           from "react-bootstrap/Button";
+import { notify }       from "../../components/notify";
+import { remove }       from "./api/api";
 import { IdDadosCurso } from "./api/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const ModalExcluirCurso: React.FC<IdDadosCurso> = ({ idCurso }) => {
   const [show, setShow] = useState<boolean>(false);

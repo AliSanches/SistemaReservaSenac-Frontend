@@ -1,72 +1,65 @@
 import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import Modal        from "react-bootstrap/Modal";
+import Button       from "react-bootstrap/Button";
+import { notify }   from "../../components/notify";
+import { remove }   from "./api/api";
+import { idDadosReserva } from "./api/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const ModalExcluirReserva = () => {
+export const ModalExcluirReserva: React.FC<idDadosReserva> = ({ idReserva })=> {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: async () => await remove(idReserva.id),
+    onSuccess: (response) => {
+      if (response?.status === 201) {
+        queryClient.invalidateQueries({ queryKey: ["lista-reservas"] });
+
+        setShow(false);
+
+        notify(response.data.message, "success");
+      } else if (response?.status === 400) {
+        setShow(false);
+
+        notify(response.data.message, "warning");
+      } else if (response?.status === 500) {
+        setShow(false);
+
+        notify(response.data.message, "error");
+      }
+    },
+  });
+
   return (
     <>
-      <Button variant="danger" className="shadow" onClick={handleShow}>
+      <Button variant="danger" onClick={handleShow}>
         Excluir
       </Button>
 
       <Modal
         show={show}
         onHide={handleClose}
-        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
-          <Modal.Title>Excluir Reserva</Modal.Title>
+        <Modal.Header className="d-flex flex-column">
+          <Modal.Title>
+            Deseja realmente <span className="text-danger">excluir</span> ?
+          </Modal.Title>
+          <div className="d-flex gap-4 my-3">
+            <Button variant="secondary" onClick={handleClose}>
+              NÃO
+            </Button>
+            <Button variant="danger" type="submit" onClick={() => mutate()}>
+              SIM
+            </Button>
+          </div>
         </Modal.Header>
-        <Modal.Body>
-          <form>
-            <Form.Label>Sala</Form.Label>
-            <Form.Select aria-label="Selecione a sala" className="mb-3">
-              <option value="1">401</option>
-              <option value="1">405</option>
-              <option value="1">502</option>
-            </Form.Select>
-
-            <Form.Label>Curso</Form.Label>
-            <Form.Select aria-label="Selecione o curso" className="mb-3">
-              <option value="1">Administração</option>
-              <option value="1">Biologia</option>
-              <option value="1">Design</option>
-            </Form.Select>
-
-            <Form.Label>Turma</Form.Label>
-            <Form.Select aria-label="Selecione a turma" className="mb-3">
-              <option value="1">1</option>
-              <option value="1">2</option>
-              <option value="1">3</option>
-            </Form.Select>
-
-            <Form.Label>Reserva Início</Form.Label>
-            <Form.Control type="date" className="mb-3" />
-
-            <Form.Label>Reserva Término</Form.Label>
-            <Form.Control type="date" className="mb-3" />
-
-            <Form.Label>Hora Início</Form.Label>
-            <Form.Control type="text" className="mb-3" placeholder="00:00" />
-
-            <Form.Label>Hora Término</Form.Label>
-            <Form.Control type="text" className="mb-3" placeholder="00:00" />
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Voltar
-          </Button>
-          <Button variant="danger">Excluir</Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

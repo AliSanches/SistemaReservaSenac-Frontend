@@ -1,23 +1,18 @@
-import { useState } from "react";
-
-import Stack from 'react-bootstrap/Stack';
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
-
-import { update } from "./api/api";
-
-import { DadosCurso } from "./api/types";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { notify } from "../../components/notify";
-import { categorias } from "./constantes";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState }    from "react";
+import Stack           from 'react-bootstrap/Stack';
+import Modal           from "react-bootstrap/Modal";
+import Button          from "react-bootstrap/Button";
+import FloatingLabel   from "react-bootstrap/FloatingLabel";
+import Form            from "react-bootstrap/Form";
+import { update }      from "./api/api";
+import { useForm }     from "react-hook-form";
+import { z }           from "zod";
+import { DadosCurso }  from "./api/types";
+import { notify }      from "../../components/notify";
+import { categorias }  from "./constantes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSchema } from "./FormCurso/FormShema";
+import { FormSchema }  from "./FormCurso/FormShema";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormData = z.infer<typeof FormSchema>;
 

@@ -3,7 +3,7 @@ import { ModalAtualizarReserva } from "./ModalAtualizarReserva";
 import { ModalExcluirReserva }   from "./ModalExcluirReserva";
 import { DadosReserva }          from "./api/types";
 
-export const CardSala: React.FC<DadosReserva> = ({ dadosReserva }) => {
+export const CardReserva: React.FC<DadosReserva> = ({ dadosReserva }) => {
     return (
         <>
             <Card className="my-2 d-flex justify-content-center" style={{ width: "270px" }}>
