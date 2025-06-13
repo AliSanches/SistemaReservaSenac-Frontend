@@ -1,80 +1,66 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { useState }     from "react";
+import Modal            from "react-bootstrap/Modal";
+import Button           from "react-bootstrap/Button";
+import { notify }       from "../../components/notify";
+import { remove }       from "./api/api";
+import { IdDadosSala }  from "./api/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const ModalExcluirSala = () => {
-  const [show, setShow] = useState(false);
+export const ModalExcluirSala: React.FC<IdDadosSala> = ({ idSala }) => {
+  const [show, setShow] = useState<boolean>(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const rows = [];
+  const queryClient = useQueryClient();
 
-  for (let i = 0; i <= 500; i++) {
-    rows.push(i);
-  }
+  const { mutate } = useMutation({
+    mutationFn: async () => await remove(idSala.id),
+    onSuccess: (response) => {
+      if (response?.status === 201) {
+        queryClient.invalidateQueries({ queryKey: ["lista-salas"] });
 
-  const sala = [];
+        setShow(false);
 
-  for (let i = 0; i <= 1000; i++) {
-    sala.push(i);
-  }
+        notify(response.data.message, "success");
+      } else if (response?.status === 400) {
+        setShow(false);
+
+        notify(response.data.message, "warning");
+      } else if (response?.status === 500) {
+        setShow(false);
+
+        notify(response.data.message, "error");
+      }
+    },
+  });
 
   return (
     <>
-      <Button variant="danger" className="shadow" onClick={handleShow}>
-        Excluir
-      </Button>
+    <Button variant="danger" onClick={handleShow}>
+      Excluir
+    </Button>
 
-      <Modal
-        show={show}
-        onHide={handleClose}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Excluir Sala</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form>
-            <Form.Label>Número da sala</Form.Label>
-            <Form.Select aria-label="Nome do curso" className="mb-3">
-              {sala.map((index, qtd) => (
-                <option key={index}>{qtd}</option>
-              ))}
-            </Form.Select>
-
-            <Form.Label>Capacidade de alunos</Form.Label>
-            <Form.Control type="number" maxLength={3} className="mb-3" />
-
-            <Form.Label>Tipo da Sala</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3">
-              <option>Laboratório de Informática</option>
-              <option>Laboratório de Farmacia</option>
-            </Form.Select>
-
-            <Form.Label>Case (armário)</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3">
-              <option>Sim</option>
-              <option>Não</option>
-            </Form.Select>
-
-            <Form.Label>Comporta Notebook</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3">
-              <option>Sim</option>
-              <option>Não</option>
-            </Form.Select>
-          </form>
-        </Modal.Body>
-        <Modal.Footer>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header className="d-flex flex-column">
+        <Modal.Title>
+          Deseja realmente <span className="text-danger">excluir</span> ?
+        </Modal.Title>
+        <div className="d-flex gap-4 my-3">
           <Button variant="secondary" onClick={handleClose}>
-            Voltar
+            NÃO
           </Button>
-          <Button variant="danger">Excluir</Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+          <Button variant="danger" type="submit" onClick={() => mutate()}>
+            SIM
+          </Button>
+        </div>
+      </Modal.Header>
+    </Modal>
+  </>
   );
 };

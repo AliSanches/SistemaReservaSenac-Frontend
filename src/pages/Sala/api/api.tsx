@@ -65,6 +65,24 @@ export const getSala = async (skip: number) => {
   }
 };
 
+export const getTurmaRefCurso = async (id: number) => {
+  try {
+    const { token } = await JSON.parse(localStorage.getItem("user")!).state;
+
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/sala/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data.retorno;
+  } catch {
+    return [];
+  }
+};
+
+
 export const remove = async (id: number | undefined) => {
   try {
     const { token } = await JSON.parse(localStorage.getItem("user")!).state;

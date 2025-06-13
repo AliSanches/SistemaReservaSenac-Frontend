@@ -35,7 +35,6 @@ export const create = async (data: Curso, arquivo: File) => {
     formData.append("nome", data.nome);
     formData.append("categoria", data.categoria);
 
-
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/curso`,
       formData,
@@ -64,11 +63,10 @@ export const update = async (id: number | undefined, data: Curso,  arquivo: File
     formData.append("categoria", data.categoria);
 
     return await axios.put(
-      `${import.meta.env.VITE_API_URL}/curso/${id}`,{formData},
+      `${import.meta.env.VITE_API_URL}/curso/${id}`,formData,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
       }
     );

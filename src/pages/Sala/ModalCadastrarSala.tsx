@@ -1,19 +1,19 @@
-import Modal         from "react-bootstrap/Modal";
-import Button        from "react-bootstrap/Button";
-import Form          from "react-bootstrap/Form";
-import Spinner       from "react-bootstrap/Spinner";
-import { useState }  from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { IoAdd }     from "react-icons/io5";
-import { getCursos } from "../Curso/api/api";
-import { getTurma }  from "../Turma/api/api";
-import { Curso as TipoCurso } from "../Curso/api/types";
-import { useForm }   from "react-hook-form";
-import { z }         from "zod";
+import Modal           from "react-bootstrap/Modal";
+import Button          from "react-bootstrap/Button";
+import Form            from "react-bootstrap/Form";
+import Spinner         from "react-bootstrap/Spinner";
+import { useState }    from "react";
+import { IoAdd }       from "react-icons/io5";
+import { getCursos }   from "../Curso/api/api";
+import { useForm }     from "react-hook-form";
+import { z }           from "zod";
+import { FormSchema }  from "./FormCadSala/FormSchema";
+import { notify }      from "../../components/notify";
+import { create }      from "./api/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSchema }from "./FormCadSala/FormSchema";
-import { notify }    from "../../components/notify";
-import { create }    from "./api/api";
+import { getTurmaRefCurso }   from "./api/api";
+import { Curso as TipoCurso } from "../Curso/api/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type FormData = z.infer<typeof FormSchema>;
 
@@ -23,6 +23,8 @@ export const ModalCadastrarSala = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [turmas, setTurmas] = useState([]);
 
   const rows = [];
 
@@ -50,11 +52,11 @@ export const ModalCadastrarSala = () => {
     queryFn: () => getCursos(skip),
   });
   
-  const { data: turmas, isLoading: loadingTurmas } = useQuery({
-    queryKey: ["lista-turmas", skip],
-    queryFn: () => getTurma(skip),
-  });
-
+  const verificaTurma = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(event.target.value);
+    const res = await getTurmaRefCurso(id);
+    setTurmas(res.turma);
+  };
 
   const queryClient = useQueryClient();
 
@@ -64,22 +66,19 @@ export const ModalCadastrarSala = () => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-salas"] });
         setShow(false);
-        reset(), notify(response.data.message, "success");
+        notify(response.data.message, "success");
       } else if (response?.status === 400) {
         setShow(false);
-        reset(), notify(response.data.message, "warning");
+        notify(response.data.message, "warning");
       } else if (response?.status === 500) {
         setShow(false);
-        reset(), notify(response.data.message, "error");
+        notify(response.data.message, "error");
       }
+      reset();
     },
   });
 
   if (loadingCursos) {
-    return <Spinner animation="border" variant="primary" />;
-  }
-
-  if (loadingTurmas) {
     return <Spinner animation="border" variant="primary" />;
   }
 
@@ -105,16 +104,19 @@ export const ModalCadastrarSala = () => {
         <Modal.Body>
           <form onSubmit={handleSubmit((data) => mutate(data))}>
             <Form.Label>Curso</Form.Label>
-            <Form.Select aria-label="Nome do curso" className="mb-3" {...register("idCurso")}>
+            <Form.Select aria-label="Nome do curso" className="mb-3" {...register("idCurso")} onChange={verificaTurma}>
+              <option>Selecione um curso</option>
               {cursos.curso.map((index: TipoCurso) => (
-                <option key={index.id}>{index.nome}</option>
+                <option key={index.id} value={index.id}>{index.nome}</option>
               ))}
             </Form.Select>
 
             <Form.Label>Turma</Form.Label>
             <Form.Select aria-label="Turma" className="mb-3" {...register("idTurma")}>
-              {turmas.turma.map((index: any) => (
-                <option key={index.id}>{index.nome}</option>
+              {turmas.map((index: any) => (
+                <option key={index.id} value={index.id}>
+                  {index.turma}
+                </option>
               ))}
             </Form.Select>
 
@@ -126,27 +128,27 @@ export const ModalCadastrarSala = () => {
             </Form.Select>
 
             <Form.Label>Capacidade de alunos</Form.Label>
-            <Form.Control type="number" maxLength={3} className="mb-3" {...register("capacidade")}/>
+            <Form.Control type="number" className="mb-3" {...register("capacidade")}/>
             {errors.capacidade && (
               <p className="m-0 pb-1 text-danger">{errors.capacidade.message}</p>
             )}
 
             <Form.Label>Tipo da Sala</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3" {...register("case")}>
-              <option value="lb-informatica">Laboratório de Informática</option>
-              <option value="lb-farmacia">Laboratório de Farmácia</option>
+            <Form.Select aria-label="Tipo da sala" className="mb-3" {...register("tipoSala")}>
+              <option value="Laboratório de Informática">Laboratório de Informática</option>
+              <option value="Laboratório de Farmácia">Laboratório de Farmácia</option>
             </Form.Select>
 
             <Form.Label>Case (armário)</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3" {...register("comportaNotebook")}>
-              <option value="sim">Sim</option>
-              <option value="nao">Não</option>
+            <Form.Select aria-label="Armario" className="mb-3" {...register("caseArmario")}>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
             </Form.Select>
 
             <Form.Label>Comporta Notebook</Form.Label>
-            <Form.Select aria-label="Tipo da sala" className="mb-3">
-              <option value="sim">Sim</option>
-              <option value="nao">Não</option>
+            <Form.Select aria-label="Notebook" className="mb-3" {...register("comportaNotebook")}>
+              <option value="Sim">Sim</option>
+              <option value="Não">Não</option>
             </Form.Select>
 
             <div className="d-flex justify-content-end gap-4">

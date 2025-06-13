@@ -11,8 +11,8 @@ export const BuscarReservas: React.FC<Search> = ({ search, setSearch }) => {
           <FcSearch />
         </InputGroup.Text>
         <Form.Control
-          placeholder="Buscar curso"
-          aria-label="curso"
+          placeholder="Buscar por data de inicio"
+          aria-label="data"
           aria-describedby="basic-addon1"
           value={search}
           onChange={(e) => setSearch(e.target.value)}

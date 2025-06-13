@@ -32,6 +32,8 @@ export const Reservas = () => {
     setSkip((prev) => (prev > 0 ? prev - 6 : 0));
   };
 
+  console.log(data)
+
   const filterArray: Array<TipoReserva> = data.reserva;
 
   const filter = search
@@ -39,8 +41,6 @@ export const Reservas = () => {
         reserva.dataInicio.toLowerCase().includes(search.toLowerCase())
       )
     : filterArray;
-
-
 
   return (
     <section className="container-lg">
@@ -55,10 +55,10 @@ export const Reservas = () => {
 
       <div
         className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
-        style={{ height: "auto" }}
+        style={{ height: "400px", overflowY: 'auto', }}
       >
         <Suspense fallback={<Spinner animation="border" variant="primary" />}>
-          {filter.length ? (
+          {filter?.length ? (
             filter.map((index: TipoReserva) => (
               <CardReserva key={index.id} dadosReserva={index} />
             ))

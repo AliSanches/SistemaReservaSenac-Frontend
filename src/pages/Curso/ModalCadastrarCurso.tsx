@@ -1,22 +1,18 @@
-import { useState } from "react";
-
-import Stack from 'react-bootstrap/Stack';
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
-import Form from "react-bootstrap/Form";
-
-import { IoAdd } from "react-icons/io5";
-
+import { useState }      from "react";
+import Stack             from 'react-bootstrap/Stack';
+import Modal             from "react-bootstrap/Modal";
+import Button            from "react-bootstrap/Button";
+import FloatingLabel     from "react-bootstrap/FloatingLabel";
+import Form              from "react-bootstrap/Form";
+import { IoAdd }         from "react-icons/io5";
+import { create }        from "./api/api";
+import { notify }        from "../../components/notify";
+import { categorias }    from "./constantes";
+import { useForm }       from "react-hook-form";
+import { z }             from "zod";
+import { zodResolver }   from "@hookform/resolvers/zod";
+import { FormSchema }    from "./FormCurso/FormShema";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-import { create } from "./api/api";
-import { notify } from "../../components/notify";
-import { categorias } from "./constantes";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSchema } from "./FormCurso/FormShema";
 
 type FormData = z.infer<typeof FormSchema>;
 
@@ -35,6 +31,7 @@ export const ModalCadastrarCurso: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(FormSchema),
   });
@@ -56,6 +53,7 @@ export const ModalCadastrarCurso: React.FC = () => {
 
         notify(response.data.message, "error");
       }
+      reset(); 
     },
   });
 

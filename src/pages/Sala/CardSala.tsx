@@ -1,4 +1,3 @@
-import Card                   from "react-bootstrap/Card";
 import { ModalAtualizarSala } from "./ModalAtualizarSala";
 import { ModalExcluirSala }   from "./ModalExcluirSala";
 import { DadosSala } from "./api/types";
@@ -6,46 +5,46 @@ import { DadosSala } from "./api/types";
 export const CardSala: React.FC<DadosSala> = ({ dadosSala }) => {
     return (
         <>
-            <Card
-            className="my-2 d-flex justify-content-center"
-            style={{ width: "270px" }}
-            >
-            <Card.Img variant="top" src="/curso01.webp" />
-            <Card.Body>
-                <Card.Title className="d-flex gap-2 fw-normal">
-                Curso:{" "}
-                <span className="text-primary fw-semibold m-0">
-                    Administração
-                </span>
-                </Card.Title>
-            <div>
-                <div className="mb-1">
-                    Número da sala:{" "}
-                    <span className="text-primary fw-semibold">{dadosSala.numeroSala}</span>
-                </div>
-                <div className="mb-1">
-                    Capacidade de Alunos:{" "}
-                    <span className="text-primary fw-semibold">{dadosSala.capacidade}</span>
-                </div>
-                <div className="mb-1">
-                    Tipo da Sala:{" "}
-                    <span className="text-primary fw-semibold">{dadosSala.tipoSala}</span>
-                </div>
-                <div className="mb-1">
-                    Case (armário):{" "}
-                    <span className="text-primary fw-semibold">{dadosSala.case}</span>
-                </div>
-                <div className="mb-1">
-                    Comporta Notebook:{" "}
-                    <span className="text-primary fw-semibold">{dadosSala.comportaNotebook}</span>
-                </div>
-            </div>
-                <div className="d-flex gap-4 justify-content-between">
-                    <ModalAtualizarSala />
-                    <ModalExcluirSala />
-                </div>
-            </Card.Body>
-            </Card>
+            <table className="table table-bordered table-striped text-white">
+                <tbody>
+                <tr>
+                    <th>Curso</th>
+                    <td className="text-primary fw-semibold">{dadosSala.cursos ? dadosSala.cursos.nome : ""}</td>
+                </tr>
+                <tr>
+                    <th>Turma</th>
+                    <td className="text-primary fw-semibold">{dadosSala.turmas ? dadosSala.turmas.nome : ""}</td>
+                </tr>
+                <tr>
+                    <th>N° da Sala</th>
+                    <td className="text-primary fw-semibold">{dadosSala.numeroSala}</td>
+                </tr>
+                <tr>
+                    <th>Capacidade</th>
+                    <td className="text-primary fw-semibold">{dadosSala.capacidade}</td>
+                </tr>
+                <tr>
+                    <th>Tipo da sala</th>
+                    <td className="text-primary fw-semibold">{dadosSala.tipoSala}</td>
+                </tr>
+                <tr>
+                    <th>Case (Armário)</th>
+                    <td className="text-primary fw-semibold">{dadosSala.caseArmario}</td>
+                </tr>
+                <tr>
+                    <th>Comporta Notebook</th>
+                    <td className="text-primary fw-semibold">{dadosSala.comportaNotebook}</td>
+                </tr>
+                <tr>
+                    <td colSpan={2}>
+                    <div className="d-flex justify-content-end gap-2">
+                        <ModalAtualizarSala dadosSala={dadosSala} />
+                        <ModalExcluirSala idSala={dadosSala}/>
+                    </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </>
     )
 }

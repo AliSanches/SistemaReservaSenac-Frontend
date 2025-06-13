@@ -5,12 +5,16 @@ export interface Sala {
   numeroSala: string;
   capacidade: string;
   tipoSala: string;
-  case: string;
+  caseArmario: string;
   comportaNotebook: string;
 }
 
 export interface DadosSala {
   dadosSala: Sala;
+}
+
+export interface IdDadosSala {
+  idSala: Sala;
 }
 
 export interface PagesFN {

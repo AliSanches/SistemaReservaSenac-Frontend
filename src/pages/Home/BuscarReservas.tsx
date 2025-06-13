@@ -1,9 +1,13 @@
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-
+import Form         from "react-bootstrap/Form";
+import InputGroup   from "react-bootstrap/InputGroup";
 import { FcSearch } from "react-icons/fc";
 
-export const BuscarReservas = () => {
+export interface Search {
+  search: string;
+  setSearch: string | any;
+}
+
+export const BuscarReservas: React.FC<Search> = ({ search, setSearch }) => {
   return (
     <>
       <InputGroup className="mb-3">
@@ -11,9 +15,11 @@ export const BuscarReservas = () => {
           <FcSearch />
         </InputGroup.Text>
         <Form.Control
-          placeholder="Buscar reserva"
-          aria-label="Reserva"
+          placeholder="Buscar por data de inicio"
+          aria-label="data"
           aria-describedby="basic-addon1"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </InputGroup>
     </>

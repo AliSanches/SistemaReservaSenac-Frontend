@@ -27,7 +27,7 @@ function App() {
             <Route path="/app/sala" element={<Sala />} />
             <Route path="/app/turma" element={<Turma />} />
             <Route path="/app/reserva" element={<Reservas />} />
-            <Route path="/app/usuarios" element={<Usuarios />} />
+            {/* <Route path="/app/usuarios" element={<Usuarios />} /> */}
           </Route>
         </Route>
 

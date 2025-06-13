@@ -1,19 +1,19 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Spinner from "react-bootstrap/Spinner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { IoAdd } from "react-icons/io5";
-import { getCursos } from "../Curso/api/api";
-import { useQuery } from "@tanstack/react-query";
-import { Curso as TipoCurso } from "../Curso/api/types";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState }    from "react";
+import Modal           from "react-bootstrap/Modal";
+import Button          from "react-bootstrap/Button";
+import Form            from "react-bootstrap/Form";
+import Spinner         from "react-bootstrap/Spinner";
+import { IoAdd }       from "react-icons/io5";
+import { getCursos }   from "../Curso/api/api";
+import { useQuery }    from "@tanstack/react-query";
+import { useForm }     from "react-hook-form";
+import { z }           from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSchema } from "./FormCadTurma/FormSchema";
-import { create } from "./api/api";
-import { notify } from "../../components/notify";
+import { FormSchema }  from "./FormCadTurma/FormSchema";
+import { create }      from "./api/api";
+import { notify }      from "../../components/notify";
+import { Curso as TipoCurso }          from "../Curso/api/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type FormData = z.infer<typeof FormSchema>;
 
@@ -37,15 +37,17 @@ export const ModalCadastrarTurma = () => {
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-turmas"] });
+        queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });
         setShow(false);
-        reset(), notify(response.data.message, "success");
+        notify(response.data.message, "success");
       } else if (response?.status === 400) {
         setShow(false);
-        reset(), notify(response.data.message, "warning");
+        notify(response.data.message, "warning");
       } else if (response?.status === 500) {
         setShow(false);
-        reset(), notify(response.data.message, "error");
+        notify(response.data.message, "error");
       }
+      reset();
     },
   });
 
@@ -115,23 +117,22 @@ export const ModalCadastrarTurma = () => {
 
             <Form.Label>Data Início</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               className="mb-3"
               {...register("dataInicio")}
             />
 
             <Form.Label>Data Término</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               className="mb-3"
               {...register("dataFinal")}
             />
 
             <Form.Label>Hora Início</Form.Label>
             <Form.Control
-              type="text"
+              type="time"
               className="mb-3"
-              placeholder="00:00:00"
               {...register("entrada")}
             />
             {errors.entrada && (
@@ -140,9 +141,8 @@ export const ModalCadastrarTurma = () => {
 
             <Form.Label>Hora Término</Form.Label>
             <Form.Control
-              type="text"
+              type="time"
               className="mb-3"
-              placeholder="00:00:00"
               {...register("saida")}
             />
             {errors.saida && (

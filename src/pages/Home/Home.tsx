@@ -1,15 +1,51 @@
-import Card from "react-bootstrap/Card";
-import Stack from "react-bootstrap/Stack";
-import { BuscarReservas } from "./BuscarReservas";
+import Stack                from "react-bootstrap/Stack";
+import { BuscarReservas }   from "./BuscarReservas";
 import { CadastrarReserva } from "./CadastrarReserva";
-import { Paginacao } from "./Paginacao";
+import { Paginacao }        from "./Paginacao";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { getReserva }       from "../../pages/Reservas/api/api";
+import { useState }         from "react";
+import Spinner              from "react-bootstrap/Spinner";
+import { CardReserva }      from "./CardReserva";
+import { Suspense, startTransition } from "react";
+import { Reserva as TipoReserva }    from "../../pages/Reservas/api/types";
 
 export const Home = () => {
+  const [skip, setSkip] = useState<number>(0);
+  const [search, setSearch] = useState<string>("");
+
+  const { data, isPending } = useSuspenseQuery({
+    queryKey: ["lista-reservas", skip],
+    queryFn: async () => await getReserva(skip),
+  });
+
+  const qtdPageTotal: number = Math.ceil(data.count / 6);
+
+  const nextPage = () => {
+    startTransition(() => {
+      setSkip((prev) => prev + 6);
+    });
+  };
+
+  const backPage = () => {
+    setSkip((prev) => (prev > 0 ? prev - 6 : 0));
+  };
+
+  console.log(data)
+
+  const filterArray: Array<TipoReserva> = data.reserva;
+
+  const filter = search
+    ? filterArray.filter((reserva) =>
+        reserva.dataInicio.toLowerCase().includes(search.toLowerCase())
+      )
+    : filterArray;
+
   return (
     <section className="container-lg">
       <Stack direction="horizontal" gap={3}>
         <div className="">
-          <BuscarReservas />
+          <BuscarReservas search={search} setSearch={setSearch} />
         </div>
         <div className="lh-sm ms-auto mb-3">
           <CadastrarReserva />
@@ -17,48 +53,30 @@ export const Home = () => {
       </Stack>
 
       <div
-        className="overflow-x-auto d-flex gap-3 flex-column"
-        style={{ height: "400px" }}
+        className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
+        style={{ height: "auto" }}
       >
-        <Card
-          className="my-2 d-flex justify-content-center"
-          style={{ width: "270px" }}
-        >
-          <Card.Img variant="top" src="/sala01.jpg" />
-          <Card.Body>
-            <Card.Title className="d-flex gap-2 fw-normal">
-              Sala: <p className="text-primary m-0 fw-semibold">402</p>
-            </Card.Title>
-            <div>
-              <span className="text-black d-flex gap-2">
-                Turma: <p className="m-0 text-primary fw-semibold">10</p>
-              </span>
-              <span className="text-black d-flex gap-2">
-                Curso:{" "}
-                <p className="m-0 text-primary fw-semibold">Administração</p>
-              </span>
-              <span className="text-black d-flex gap-2">
-                Dia Inicio:{" "}
-                <p className="m-0 text-primary fw-semibold">10/01/2025</p>
-              </span>
-              <span className="text-black d-flex gap-2">
-                Dia Término:{" "}
-                <p className="m-0 text-primary fw-semibold">12/01/2025</p>
-              </span>
-              <span className="text-black d-flex gap-2">
-                Hora Entrada:{" "}
-                <p className="m-0 text-primary fw-semibold">13:00H</p>
-              </span>
-              <span className="text-black d-flex gap-2">
-                Hora Saída:{" "}
-                <p className="m-0 text-primary fw-semibold">17:30H</p>
-              </span>
+        <Suspense fallback={<Spinner animation="border" variant="primary" />}>
+          {filter?.length ? (
+            filter.map((index: TipoReserva) => (
+              <CardReserva key={index.id} dadosReserva={index} />
+            ))
+          ) : isPending ? (
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" variant="primary" />
             </div>
-          </Card.Body>
-        </Card>
-      </div>
+          ) : (
+            <span>Nada a carregar...</span>
+          )}
+        </Suspense>
 
-      <Paginacao />
+        <Paginacao
+          nextPage={nextPage}
+          backPage={backPage}
+          totalPages={qtdPageTotal}
+          skip={skip}
+        />
+      </div>
     </section>
   );
 };

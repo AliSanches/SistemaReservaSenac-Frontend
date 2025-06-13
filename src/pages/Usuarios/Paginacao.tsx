@@ -1,7 +1,5 @@
 import Pagination from "react-bootstrap/Pagination";
 
-import style from "./Usuarios.module.css";
-
 export const Paginacao = () => {
   const active: number = 3;
   const items = [];

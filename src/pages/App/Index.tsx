@@ -1,14 +1,11 @@
-import logo from "/Senac_logo.svg.png";
-
-import Nav from "react-bootstrap/Nav";
-
-import style from "./style.module.css";
-import { MenuMobile } from "./MenuMobile";
-
-import { NavLink, Outlet, useNavigate } from "react-router";
+import logo       from "/Senac_logo.svg.png";
+import Nav        from "react-bootstrap/Nav";
+import style      from "./style.module.css";
 import { Footer } from "../Footer/Footer";
-import UserStore from "../../store/userStore";
+import UserStore  from "../../store/userStore";
 import { Button } from "react-bootstrap";
+import { MenuMobile }                   from "./MenuMobile";
+import { NavLink, Outlet, useNavigate } from "react-router";
 
 export const Index = () => {
   const user: any = UserStore();
@@ -78,7 +75,7 @@ export const Index = () => {
               RESERVA
             </NavLink>
           </Nav.Item>
-          <Nav.Item>
+          {/* <Nav.Item>
             <NavLink
               to={"/app/usuarios"}
               className={({ isActive }) =>
@@ -87,7 +84,7 @@ export const Index = () => {
             >
               USUÁRIOS
             </NavLink>
-          </Nav.Item>
+          </Nav.Item> */}
           <Nav.Item>
             <Button onClick={logoutUser}>SAIR</Button>
           </Nav.Item>

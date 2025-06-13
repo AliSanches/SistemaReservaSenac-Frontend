@@ -54,10 +54,10 @@ export const Sala = () => {
 
       <div
         className="overflow-x-auto d-flex gap-3 flex-column  flex-lg-row flex-sm-wrap justify-content-lg-center"
-        style={{ height: "auto" }}
+        style={{ height: "400px", overflowY: 'auto', }}
       >
         <Suspense fallback={<Spinner animation="border" variant="primary" />}>
-          {filter.length ? (
+          {filter?.length ? (
             filter.map((index: TipoSala) => (
               <CardSala key={index.id} dadosSala={index} />
             ))

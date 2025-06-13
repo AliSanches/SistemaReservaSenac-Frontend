@@ -1,7 +1,5 @@
 import Card                      from "react-bootstrap/Card";
-import { ModalAtualizarReserva } from "./ModalAtualizarReserva";
-import { ModalExcluirReserva }   from "./ModalExcluirReserva";
-import { DadosReserva }          from "./api/types";
+import { DadosReserva }          from "../../pages/Reservas/api/types";
 
 export const CardReserva: React.FC<DadosReserva> = ({ dadosReserva }) => {
     return (
@@ -36,10 +34,6 @@ export const CardReserva: React.FC<DadosReserva> = ({ dadosReserva }) => {
                         Hora Saída:{" "}
                         <p className="m-0 text-primary fw-semibold">{dadosReserva.horaTermino}</p>
                     </span>
-                    </div>
-                    <div className="d-flex gap-4 justify-content-between">
-                        <ModalAtualizarReserva dadosReserva={dadosReserva} />
-                        <ModalExcluirReserva idReserva={dadosReserva} />
                     </div>
                 </Card.Body>
             </Card>

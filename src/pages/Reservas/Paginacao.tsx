@@ -38,7 +38,7 @@ export const Paginacao = ({
             {index}
           </Pagination.Item>
         ))}
-        {data.curso.length > 5 ? (
+        {data.curso?.length > 5 ? (
           <Pagination.Next className={`${style.pageNoneRelative}`} onClick={nextPage} />
         ) : (
           <Pagination.Next disabled />

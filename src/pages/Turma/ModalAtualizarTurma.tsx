@@ -1,18 +1,18 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Curso as TipoCurso } from "../Curso/api/types";
-import { DadosTurma } from "./api/types";
-import Spinner from "react-bootstrap/Spinner";
-import { getCursos } from "../Curso/api/api";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState }    from "react";
+import Modal           from "react-bootstrap/Modal";
+import Button          from "react-bootstrap/Button";
+import Form            from "react-bootstrap/Form";
+import { DadosTurma }  from "./api/types";
+import Spinner         from "react-bootstrap/Spinner";
+import { getCursos }   from "../Curso/api/api";
+import { useForm }     from "react-hook-form";
+import { z }           from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormSchema } from "./FormCadTurma/FormSchema";
-import { notify } from "../../components/notify";
-import { update } from "./api/api";
+import { FormSchema }  from "./FormCadTurma/FormSchema";
+import { notify }      from "../../components/notify";
+import { update }      from "./api/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Curso as TipoCurso }                    from "../Curso/api/types";
 
 type FormData = z.infer<typeof FormSchema>;
 
@@ -45,6 +45,7 @@ export const ModalAtualizarTurma: React.FC<DadosTurma> = ({ dadosTurma }) => {
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-turmas"] });
+        queryClient.invalidateQueries({ queryKey: ["lista-cursos"] });
         setShow(false);
         reset(), notify(response.data.message, "success");
       } else if (response?.status === 400) {
@@ -113,7 +114,7 @@ export const ModalAtualizarTurma: React.FC<DadosTurma> = ({ dadosTurma }) => {
 
             <Form.Label>Data Início</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               className="mb-3"
               {...register("dataInicio")}
               defaultValue={dadosTurma.dataInicio}
@@ -121,7 +122,7 @@ export const ModalAtualizarTurma: React.FC<DadosTurma> = ({ dadosTurma }) => {
 
             <Form.Label>Data Término</Form.Label>
             <Form.Control
-              type="text"
+              type="date"
               className="mb-3"
               {...register("dataFinal")}
               defaultValue={dadosTurma.dataFinal}
@@ -129,9 +130,8 @@ export const ModalAtualizarTurma: React.FC<DadosTurma> = ({ dadosTurma }) => {
 
             <Form.Label>Hora Início</Form.Label>
             <Form.Control
-              type="text"
+              type="time"
               className="mb-3"
-              placeholder="00:00:00"
               {...register("entrada")}
               defaultValue={dadosTurma.entrada}
             />
@@ -141,9 +141,8 @@ export const ModalAtualizarTurma: React.FC<DadosTurma> = ({ dadosTurma }) => {
 
             <Form.Label>Hora Término</Form.Label>
             <Form.Control
-              type="text"
+              type="time"
               className="mb-3"
-              placeholder="00:00:00"
               {...register("saida")}
               defaultValue={dadosTurma.saida}
             />
