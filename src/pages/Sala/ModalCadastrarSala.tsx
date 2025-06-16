@@ -113,6 +113,7 @@ export const ModalCadastrarSala = () => {
 
             <Form.Label>Turma</Form.Label>
             <Form.Select aria-label="Turma" className="mb-3" {...register("idTurma")}>
+              <option >Selecione uma turma</option>
               {turmas.map((index: any) => (
                 <option key={index.id} value={index.id}>
                   {index.turma}

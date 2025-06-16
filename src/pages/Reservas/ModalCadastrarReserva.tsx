@@ -100,6 +100,7 @@ export const ModalCadastrarReserva = () => {
           <form onSubmit={handleSubmit((data) => mutate(data))}>
             <Form.Label>Sala</Form.Label>
             <Form.Select aria-label="Selecione a sala" className="mb-3" {...register("sala")}>
+              <option>Selecione uma sala</option>
               {salas.sala.map((index: any) => (
                 <option key={index.id}>{index.nome}</option>
               ))}
@@ -107,6 +108,7 @@ export const ModalCadastrarReserva = () => {
 
             <Form.Label>Curso</Form.Label>
             <Form.Select aria-label="Selecione o curso" className="mb-3" {...register("idCurso")}>
+              <option>Selecione um curso</option>
               {cursos.curso.map((index: any) => (
                 <option key={index.id}>{index.nome}</option>
               ))}
@@ -114,6 +116,7 @@ export const ModalCadastrarReserva = () => {
 
             <Form.Label>Turma</Form.Label>
             <Form.Select aria-label="Selecione a turma" className="mb-3" {...register("idTurma")}>
+              <option>Selecione uma turma</option>
               {turmas.turma.map((index: any) => (
                 <option key={index.id}>{index.nome}</option>
               ))}

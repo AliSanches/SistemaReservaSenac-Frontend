@@ -13,7 +13,7 @@ export const CardSala: React.FC<DadosSala> = ({ dadosSala }) => {
                 </tr>
                 <tr>
                     <th>Turma</th>
-                    <td className="text-primary fw-semibold">{dadosSala.turmas ? dadosSala.turmas.nome : ""}</td>
+                    <td className="text-primary fw-semibold">{dadosSala.turmas ? dadosSala.turmas.turma : ""}</td>
                 </tr>
                 <tr>
                     <th>N° da Sala</th>
