@@ -12,13 +12,14 @@ import { notify }      from "../../components/notify";
 import { create }      from "./api/api";
 import { getSala }     from "../Sala/api/api";
 import { getCursos }   from "../Curso/api/api";
-import { getTurma }    from "../Turma/api/api";
+import { getTurmaRefCurso }   from "../Sala/api/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type FormData = z.infer<typeof FormSchema>;
 
 export const ModalCadastrarReserva = () => {
   const [show, setShow] = useState(false);
+  const [turmas, setTurmas] = useState([])
   const skip = 0;
 
   const handleClose = () => setShow(false);
@@ -31,6 +32,12 @@ export const ModalCadastrarReserva = () => {
     formState: { errors },
   } = useForm<FormData>({resolver: zodResolver(FormSchema)});
 
+  const verificaTurma = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(event.target.value);
+    const res = await getTurmaRefCurso(id);
+    setTurmas(res.turma);
+  };
+
   const { data: salas, isLoading: loadingSalas } = useQuery({
     queryKey: ["lista-salas", skip],
     queryFn: () => getSala(skip),
@@ -39,11 +46,6 @@ export const ModalCadastrarReserva = () => {
   const { data: cursos, isLoading: loadingCursos } = useQuery({
     queryKey: ["lista-cursos", skip],
     queryFn: () => getCursos(skip),
-  });
-  
-  const { data: turmas, isLoading: loadingTurmas } = useQuery({
-    queryKey: ["lista-turmas", skip],
-    queryFn: () => getTurma(skip),
   });
 
   const queryClient = useQueryClient();
@@ -54,15 +56,29 @@ export const ModalCadastrarReserva = () => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-reserva"] });
         setShow(false);
-        reset(), notify(response.data.message, "success");
+        notify(response.data.message, "success");
       } else if (response?.status === 400) {
         setShow(false);
-        reset(), notify(response.data.message, "warning");
+        notify(response.data.message, "warning");
       } else if (response?.status === 500) {
         setShow(false);
-        reset(), notify(response.data.message, "error");
+        notify(response.data.message, "error");
       }
+      reset();  
     },
+    onError: (error: any) => {
+      const status = error.response?.status;
+      const message = error.response?.data?.message;
+
+        setShow(false);
+  
+      if (status === 400) {
+        notify(message, "warning");
+      } else {
+        notify(message, "error");
+      }
+      reset();  
+    }
   });
 
   if (loadingSalas) {
@@ -70,10 +86,6 @@ export const ModalCadastrarReserva = () => {
   }
 
   if (loadingCursos) {
-    return <Spinner animation="border" variant="primary" />;
-  }
-
-  if (loadingTurmas) {
     return <Spinner animation="border" variant="primary" />;
   }
 
@@ -99,26 +111,26 @@ export const ModalCadastrarReserva = () => {
         <Modal.Body>
           <form onSubmit={handleSubmit((data) => mutate(data))}>
             <Form.Label>Sala</Form.Label>
-            <Form.Select aria-label="Selecione a sala" className="mb-3" {...register("sala")}>
+            <Form.Select aria-label="Selecione a sala" className="mb-3" {...register("idSala")}>
               <option>Selecione uma sala</option>
               {salas.sala.map((index: any) => (
-                <option key={index.id}>{index.nome}</option>
+                <option key={index.id} value={index.id}>{index.numeroSala}</option>
               ))}
             </Form.Select>
 
             <Form.Label>Curso</Form.Label>
-            <Form.Select aria-label="Selecione o curso" className="mb-3" {...register("idCurso")}>
+            <Form.Select aria-label="Selecione o curso" className="mb-3" {...register("idCurso")} onChange={verificaTurma}>
               <option>Selecione um curso</option>
               {cursos.curso.map((index: any) => (
-                <option key={index.id}>{index.nome}</option>
+                <option key={index.id} value={index.id}>{index.nome}</option>
               ))}
             </Form.Select>
 
             <Form.Label>Turma</Form.Label>
             <Form.Select aria-label="Selecione a turma" className="mb-3" {...register("idTurma")}>
               <option>Selecione uma turma</option>
-              {turmas.turma.map((index: any) => (
-                <option key={index.id}>{index.nome}</option>
+              {turmas.map((index: any) => (
+                <option key={index.id} value={index.id}>{index.turma}</option>
               ))}
             </Form.Select>
 
@@ -135,13 +147,13 @@ export const ModalCadastrarReserva = () => {
             )}
 
             <Form.Label>Hora Início</Form.Label>
-            <Form.Control type="text" className="mb-3" placeholder="00:00" {...register("horaInicio")}/>
+            <Form.Control type="time" className="mb-3" placeholder="00:00" {...register("horaInicio")}/>
             {errors.horaInicio && (
               <p className="m-0 pb-1 text-danger">{errors.horaInicio.message}</p>
             )}
 
             <Form.Label>Hora Término</Form.Label>
-            <Form.Control type="text" className="mb-3" placeholder="00:00" {...register("horaTermino")}/>
+            <Form.Control type="time" className="mb-3" placeholder="00:00" {...register("horaTermino")}/>
             {errors.horaTermino && (
               <p className="m-0 pb-1 text-danger">{errors.horaTermino.message}</p>
             )}

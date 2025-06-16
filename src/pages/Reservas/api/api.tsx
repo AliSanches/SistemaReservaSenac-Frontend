@@ -19,8 +19,8 @@ export const create = async (data: Reserva) => {
     );
 
     return response;
-  } catch {
-    return;
+  } catch (error) {
+    throw error;
   }
 };
 

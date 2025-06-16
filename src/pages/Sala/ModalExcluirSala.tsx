@@ -19,7 +19,6 @@ export const ModalExcluirSala: React.FC<IdDadosSala> = ({ idSala }) => {
     onSuccess: (response) => {
       if (response?.status === 201) {
         queryClient.invalidateQueries({ queryKey: ["lista-salas"] });
-
         setShow(false);
 
         notify(response.data.message, "success");
@@ -33,6 +32,18 @@ export const ModalExcluirSala: React.FC<IdDadosSala> = ({ idSala }) => {
         notify(response.data.message, "error");
       }
     },
+    onError: (error: any) => {
+      const status = error.response?.status;
+      const message = error.response?.data?.message;
+
+        setShow(false);
+  
+      if (status === 400) {
+        notify(message, "warning");
+      } else {
+        notify(message, "error");
+      }
+    }
   });
 
   return (

@@ -6,9 +6,9 @@ import { getReserva }       from "./api/api";
 import { useState }         from "react";
 import Spinner              from "react-bootstrap/Spinner";
 import { CardReserva }      from "./CardReserva";
-import { Suspense, startTransition } from "react";
-import { ModalCadastrarReserva } from "./ModalCadastrarReserva";
-import { Reserva as TipoReserva }        from "./api/types";
+import { Suspense, startTransition }  from "react";
+import { ModalCadastrarReserva }      from "./ModalCadastrarReserva";
+import { Reserva as TipoReserva }     from "./api/types";
 
 
 export const Reservas = () => {
@@ -31,8 +31,6 @@ export const Reservas = () => {
   const backPage = () => {
     setSkip((prev) => (prev > 0 ? prev - 6 : 0));
   };
-
-  console.log(data)
 
   const filterArray: Array<TipoReserva> = data.reserva;
 

@@ -93,8 +93,8 @@ export const remove = async (id: number | undefined) => {
         "Content-Type": "application/json",
       },
     });
-  } catch {
-    return;
+  } catch (error) {
+    throw error;
   }
 };
 

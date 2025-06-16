@@ -1,12 +1,12 @@
 import { z } from "zod";
 
 export const FormSchema = z.object({
-  sala: z
-    .number(),
+  idSala: z
+    .string(),
   idCurso: z
-    .number(),
+    .string(),
   idTurma: z
-    .number(),
+    .string(),
   dataInicio: z
     .string(),
   dataTermino: z
