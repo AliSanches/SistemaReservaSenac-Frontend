@@ -24,6 +24,8 @@ export const create = async (data: Reserva) => {
   }
 };
 
+
+
 export const update = async (id: number | undefined, data: Reserva) => {
   try {
     const { token } = await JSON.parse(localStorage.getItem("user")!).state;
@@ -62,6 +64,25 @@ export const getReserva = async (skip: number) => {
     return response.data.retorno;
   } catch {
     return [];
+  }
+};
+
+export const getInfTurma = async (id: number) => {
+  try {
+    const { token } = await JSON.parse(localStorage.getItem("user")!).state;
+
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/turma/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data.retorno;
+  } catch {
+    return;
   }
 };
 

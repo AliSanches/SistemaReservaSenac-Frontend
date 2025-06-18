@@ -9,17 +9,21 @@ import { z }           from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema }  from "./FormCadReserva/FormSchema";
 import { notify }      from "../../components/notify";
-import { create }      from "./api/api";
 import { getSala }     from "../Sala/api/api";
 import { getCursos }   from "../Curso/api/api";
-import { getTurmaRefCurso }   from "../Sala/api/api";
+import { getTurmaRefCurso }    from "../Sala/api/api";
+import { create, getInfTurma } from "./api/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type FormData = z.infer<typeof FormSchema>;
 
 export const ModalCadastrarReserva = () => {
   const [show, setShow] = useState(false);
-  const [turmas, setTurmas] = useState([])
+  const [turmas, setTurmas] = useState([]);
+  const [inicio, setInicio] = useState('');
+  const [final, setFinal] = useState('');
+  const [dataInicio, setDataInicio] = useState('');
+  const [dataFinal, setDataFinal] = useState([]);
   const skip = 0;
 
   const handleClose = () => setShow(false);
@@ -36,6 +40,15 @@ export const ModalCadastrarReserva = () => {
     const id = Number(event.target.value);
     const res = await getTurmaRefCurso(id);
     setTurmas(res.turma);
+  };
+
+  const verificaInfTurma = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const id = Number(event.target.value);
+    const res = await getInfTurma(id);
+    setInicio(res.entrada);
+    setFinal(res.saida);
+    setDataInicio(res.dataInicio);
+    setDataFinal(res.dataFinal);
   };
 
   const { data: salas, isLoading: loadingSalas } = useQuery({
@@ -127,7 +140,7 @@ export const ModalCadastrarReserva = () => {
             </Form.Select>
 
             <Form.Label>Turma</Form.Label>
-            <Form.Select aria-label="Selecione a turma" className="mb-3" {...register("idTurma")}>
+            <Form.Select aria-label="Selecione a turma" className="mb-3" {...register("idTurma")} onChange={verificaInfTurma}>
               <option>Selecione uma turma</option>
               {turmas.map((index: any) => (
                 <option key={index.id} value={index.id}>{index.turma}</option>
@@ -135,25 +148,25 @@ export const ModalCadastrarReserva = () => {
             </Form.Select>
 
             <Form.Label>Reserva Início</Form.Label>
-            <Form.Control type="date" className="mb-3" {...register("dataInicio")}/>
+            <Form.Control type="date" className="mb-3" defaultValue={dataInicio} {...register("dataInicio")}/>
             {errors.dataInicio && (
               <p className="m-0 pb-1 text-danger">{errors.dataInicio.message}</p>
             )}
 
             <Form.Label>Reserva Término</Form.Label>
-            <Form.Control type="date" className="mb-3" {...register("dataTermino")}/>
+            <Form.Control type="date" className="mb-3" defaultValue={dataFinal} {...register("dataTermino")}/>
             {errors.dataTermino && (
               <p className="m-0 pb-1 text-danger">{errors.dataTermino.message}</p>
             )}
 
             <Form.Label>Hora Início</Form.Label>
-            <Form.Control type="time" className="mb-3" placeholder="00:00" {...register("horaInicio")}/>
+            <Form.Control type="time" className="mb-3" defaultValue={inicio} {...register("horaInicio")}/>
             {errors.horaInicio && (
               <p className="m-0 pb-1 text-danger">{errors.horaInicio.message}</p>
             )}
 
             <Form.Label>Hora Término</Form.Label>
-            <Form.Control type="time" className="mb-3" placeholder="00:00" {...register("horaTermino")}/>
+            <Form.Control type="time" className="mb-3" defaultValue={final} {...register("horaTermino")}/>
             {errors.horaTermino && (
               <p className="m-0 pb-1 text-danger">{errors.horaTermino.message}</p>
             )}
